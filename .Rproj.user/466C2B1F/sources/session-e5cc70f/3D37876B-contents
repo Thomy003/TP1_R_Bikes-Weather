@@ -1,11 +1,19 @@
+# INTRODUCCIÓN
+
 ---
 title: "TP1"
-author: "Salvador, Miguel, Thomas"
+subject: "Laboratorio de Datos"
+integrantes: "Salvador, Miguel, Thomas"
 format: html
 editor: visual
 ---
 
-Los dataframes con los que trabajaremos son los siguientes
+## Dataframes y Librerías
+
+------------------------------------------------------------------------
+
+Durante esta investigación vamos a trabajar con dos dataframes. Para ello comenzaremos guardándolas en dos variables locales usando el comando read_csv.
+
 ```{r}
 library(readr)
 clima_aeroparque_BA_2022 <- read_csv("Data/Clima_Aeroparque_BA.csv")
@@ -15,3 +23,87 @@ bike_trips_2022 <- read_csv("Data/trips_2022_reducido.csv")
 View(bike_trips_2022)
 ```
 
+A continuación inicializaremos las librerías que utilizaremos durante este análisis. Notamos que el paquete tidyverse incluye librerías como ggplot2 (visualización de datos), dplyr (manipulación de datos), entre otros.
+
+```{r}
+install.packages("tidyverse")
+library(tidyverse)
+```
+
+## ANÁLISIS GENERAL DE DATAFRAME VIAJES DE ECO-BICIS 2022
+
+------------------------------------------------------------------------
+
+Para este análisis solamente observaremos el comportamiento de aquellos registros cuya duración del viaje este entre 5 minutos a 1 hora, para evitar valores atípicos.
+
+```{r}
+bike_trips_2022_5_to_60_min <- bike_trips_2022 %>% 
+  filter(between(duracion_recorrido, left = 60*5, right = 60*60))
+```
+
+Análisis general del nuevo dataframe de viajes en eco-bicis 2022.
+
+```{r}
+summary(bike_trips_2022_5_to_60_min) #ESTO ESTA BIEN PONERLO?
+```
+
+### Variables del Dataframe
+
+::: {style="color: white;"}
+"X.1" \--\>
+
+"X" \--\>
+
+"Id_recorrido" \--\>
+
+"duracion_recorrido" \--\>
+
+"fecha_origen_recorrido" \--\> establece la fecha y horario de inicio del viaje
+
+"id_estacion_origen" \--\>
+
+"nombre_estacion_origen" \--\>
+
+"direccion_estacion_origen" \--\>
+
+"long_estacion_origen" \--\>
+
+"lat_estacion_origen" \--\>
+
+"fecha_destino_recorrido" \--\>
+
+"id_estacion_destino" \--\>
+
+"nombre_estacion_destino" \--\>
+
+"direccion_estacion_destino" \--\>
+
+"long_estacion_destino" \--\>
+
+"lat_estacion_destino" \--\>
+
+"id_usuario" \--\>
+
+"modelo_bicicleta" \--\>
+
+"Género" \--\>
+
+"fecha" \--\>
+:::
+
+------------------------------------------------------------------------
+
+### Visualización de Datos
+
+Visualización duración de los recorridos
+
+```{r}
+#| label: trip_duration
+bike_trips_2022_5_to_60_min %>% 
+  mutate(duracion_recorrido = duracion_recorrido/60) %>% 
+  ggplot(mapping = aes(x = duracion_recorrido)) +
+  geom_histogram(colour = "#E6AC6E", fill = "beige", bins = 11) +
+  labs(x = "Duracion", y = "Cantidad", title = "Duracion de los recorridos en minutos")
+```
+
+Promedio:
