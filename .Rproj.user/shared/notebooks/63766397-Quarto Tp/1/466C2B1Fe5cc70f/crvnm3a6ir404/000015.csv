@@ -1,0 +1,2 @@
+"0","bike_trips_2022_5_to_60_min <- bike_trips_2022 %>% "
+"0","  filter(between(duracion_recorrido, left = 60*5, right = 60*60))"
