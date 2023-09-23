@@ -5,7 +5,8 @@ format: html
 editor: visual
 ---
 
-Los dataframes con los que trabajaremos son los siguientes
+Durante esta investigación vamos a trabajar con dos dataframes. Para ello comenzaremos guardándolas en dos variables locales usando el comando read_csv.
+
 ```{r}
 library(readr)
 clima_aeroparque_BA_2022 <- read_csv("Data/Clima_Aeroparque_BA.csv")
@@ -13,5 +14,25 @@ View(Clima_Aeroparque_BA)
 
 bike_trips_2022 <- read_csv("Data/trips_2022_reducido.csv")
 View(bike_trips_2022)
+```
+A continuación inicializaremos las librerías que utilizaremos durante este análisis. Notamos que el paquete tidyverse incluye librerías como ggplot2 (visualización de datos), dplyr (manipulación de datos), entre otros.
+```{r}
+install.packages("tidyverse")
+library(tidyverse)
+```
+
+
+## ANÁLISIS DE DATAFRAME VIAJES DE ECO-BICIS 2022
+Para este análisis solamente observaremos el comportamiento de aquellos registros cuya duracion del viaje este entre 5 minutos a 1 hora, para evitar valores atípicos.
+
+```{r}
+bike_trips_2022_5_to_60_min <- bike_trips_2022 %>% 
+  filter(between(duracion_recorrido, left = 60*5, right = 60*60))
+```
+
+
+Análisis general del nuevo dataframe de viajes en eco-bicis 2022.
+```{r}
+summary(bike_trips_2022_5_to_60_min) #ESTO ESTA BIEN PONERLO?
 ```
 

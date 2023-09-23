@@ -1,6 +1,6 @@
 {
     "id": "3D37876B",
-    "path": "~/UBA (Ciencia de Datos)/CIENCIA DE DATOS/Laboratorio de Datos/TP1_Team_Samoa/Quarto Tp.qmd",
+    "path": "C:/Users/HP/OneDrive/Documentos/UBA (Ciencia de Datos)/CIENCIA DE DATOS/Laboratorio de Datos/TP1_Team_Samoa/Quarto Tp.qmd",
     "project_path": "Quarto Tp.qmd",
     "type": "quarto_markdown",
     "hash": "3218755179",
@@ -23,11 +23,11 @@
         "ignored_words": "read\n"
     },
     "folds": "",
-    "lastKnownWriteTime": 1695433102,
+    "lastKnownWriteTime": 1695435286,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1695434905035,
+    "last_content_update": 1695435286617,
     "read_only": false,
     "read_only_alternatives": []
 }
