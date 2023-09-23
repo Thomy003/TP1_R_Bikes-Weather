@@ -1,0 +1,19 @@
+---
+title: "TP1"
+author: "Salvador De Vedia"
+        "Miguel Avendaño"
+        "Thomas Castagnola"
+format: html
+editor: visual
+---
+
+cntrl + alt + i
+cntrl + alt + k
+
+Primero vamos a comenzar corregiendo el dataframe con respecto a duracion_recorrido
+
+```{r}
+trips_2022_reducido %>% filter(where(duracion_recorrido > 60)) %>% 
+  mutate(duracion_recorrido * 1000)
+```
+
