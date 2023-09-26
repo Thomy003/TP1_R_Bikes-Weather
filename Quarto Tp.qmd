@@ -205,8 +205,6 @@ grafico_temperatura_por_dia
 
 #### Precipitaciones durante el year
 
-Fijarse si en febrero no hay datos atipicos
-
 ```{r}
 precipitaciones_por_mes
 ```
