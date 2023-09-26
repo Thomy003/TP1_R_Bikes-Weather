@@ -1,10 +1,5 @@
 
-
-
-
-
-
-
+#Como no conocia la funcion built-in months, para separar por meses iba a utilizar esta funcion que me habia armado
 t <- bike_trips_2022_5_to_60_min %>%
   mutate(date_character = as.character(fecha_origen_recorrido)) %>% 
   select(date_character) %>% 

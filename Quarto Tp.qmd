@@ -8,10 +8,25 @@ format: html
 editor: visual
 ---
 
-## Dataframes y Librerías
+------------------------------------------------------------------------
+
+## INFORMACIÓN SOBRE LAS LIBRERÍAS
+
+Para nuestra proyecto de análisis de datos, utilizaremos las librerías
+
+tidyverse es un paquete que incluye librerías como ggplot2 (visualización de datos), dplyr (manipulación de datos), ...
 
 ------------------------------------------------------------------------
 
+## INFORMACIÓN SOBRE LOS DATA FRAMES
+
+Durante esta investigación vamos a trabajar con dos dataframes relacionados al uso de Eco-bicis en CABA y el clima registrada en aeroparque, ambos registros son del anio 2022.
+
+Para este análisis solamente observaremos el comportamiento de aquellos registros cuya duración del viaje este entre 5 minutos a 1 hora, para evitar valores atípicos.
+
+------------------------------------------------------------------------
+
+## SCRIPTS
 
 ```{r}
 source(file = "Script_TP1.R", local = TRUE)
@@ -19,32 +34,19 @@ source(file = "Script_TP1.R", local = TRUE)
 source(file = "Hoja Auxiliar.R", local = TRUE)
 ```
 
-##INFORMACION DATAFRAMES
-Durante esta investigación vamos a trabajar con dos dataframes. Para ello comenzaremos guardándolas en dos variables locales usando el comando read_csv.
-
-
-
-A continuación inicializaremos las librerías que utilizaremos durante este análisis. Notamos que el paquete tidyverse incluye librerías como ggplot2 (visualización de datos), dplyr (manipulación de datos), entre otros.
-
-##INFORMACION LIBRERIAS
-
+------------------------------------------------------------------------
 
 ## ANÁLISIS DESCRIPTIVO DE DATAFRAME VIAJES DE ECO-BICIS 2022
 
-------------------------------------------------------------------------
-
-Para este análisis solamente observaremos el comportamiento de aquellos registros cuya duración del viaje este entre 5 minutos a 1 hora, para evitar valores atípicos.
 ```{r}
-View(bike_trips_2022_5_to_60_min)
+head(bike_trips_2022_5_to_60_min)
 ```
-
 
 Análisis general del nuevo dataframe de viajes en eco-bicis 2022.
 
 ```{r}
 summary_bike_trips_2022_5_to_60_min
 ```
-
 
 ### Variables del Dataframe
 
@@ -90,14 +92,12 @@ summary_bike_trips_2022_5_to_60_min
 "fecha" \--\>
 :::
 
-------------------------------------------------------------------------
-
 ### Visualización de Datos
 
 #### Duración de los recorridos
 
 ```{r}
-tabla
+trips_duration_in_minutes
 ```
 
 ```{r}
@@ -106,23 +106,19 @@ promedio_y_mediana_de_viajes
 
 #### Fecha de recorridos
 
-(me gustaria separa por horario)
-
-```{r}
-month_trip
-```
-
 ```{r}
 trips_by_month 
+trips_by_hour
+trips_by_month_and_hour
 ```
 
-#### Estacion de Origen
+#### Estación de Origen
 
 ```{r}
 origin_trip
 ```
 
-#### Estacion de Destino
+#### Estación de Destino
 
 ```{r}
 destination_trip
@@ -191,21 +187,15 @@ bike_type
 use_of_bikes_by_gender 
 ```
 
+------------------------------------------------------------------------
+
 ## ANÁLISIS DESCRIPTIVO DE DATAFRAME VIAJES DE CLIMA AEROPARQUE 2022
 
 ```{r}
 summary_weather
 ```
 
-Separamos por mes
-
-```{r}
-month_climate
-```
-
 #### Clima durante el year
-
-como hago para hacer una linea que pase por los puntos
 
 ```{r}
 grafico_temperatura_por_mes 
