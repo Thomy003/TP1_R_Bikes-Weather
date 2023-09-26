@@ -1,4 +1,3 @@
-
 # INTRODUCCIÓN
 
 ---
@@ -13,40 +12,39 @@ editor: visual
 
 ------------------------------------------------------------------------
 
-Durante esta investigación vamos a trabajar con dos dataframes. Para ello comenzaremos guardándolas en dos variables locales usando el comando read_csv.
 
 ```{r}
-library(readr)
-clima_aeroparque_BA_2022 <- read_csv("Data/Clima_Aeroparque_BA.csv")
-View(Clima_Aeroparque_BA)
+source(file = "Script_TP1.R", local = TRUE)
 
-bike_trips_2022 <- read_csv("Data/trips_2022_reducido.csv")
-View(bike_trips_2022)
+source(file = "Hoja Auxiliar.R", local = TRUE)
 ```
+
+##INFORMACION DATAFRAMES
+Durante esta investigación vamos a trabajar con dos dataframes. Para ello comenzaremos guardándolas en dos variables locales usando el comando read_csv.
+
+
 
 A continuación inicializaremos las librerías que utilizaremos durante este análisis. Notamos que el paquete tidyverse incluye librerías como ggplot2 (visualización de datos), dplyr (manipulación de datos), entre otros.
 
-```{r}
-#install.packages("tidyverse")
-library(tidyverse)
-```
+##INFORMACION LIBRERIAS
+
 
 ## ANÁLISIS DESCRIPTIVO DE DATAFRAME VIAJES DE ECO-BICIS 2022
 
 ------------------------------------------------------------------------
 
 Para este análisis solamente observaremos el comportamiento de aquellos registros cuya duración del viaje este entre 5 minutos a 1 hora, para evitar valores atípicos.
-
 ```{r}
-bike_trips_2022_5_to_60_min <- bike_trips_2022 %>% 
-  filter(between(duracion_recorrido, left = 60*5, right = 60*60))
+View(bike_trips_2022_5_to_60_min)
 ```
+
 
 Análisis general del nuevo dataframe de viajes en eco-bicis 2022.
 
 ```{r}
-summary(bike_trips_2022_5_to_60_min) #ESTO ESTA BIEN PONERLO?
+summary_bike_trips_2022_5_to_60_min
 ```
+
 
 ### Variables del Dataframe
 
@@ -99,18 +97,11 @@ summary(bike_trips_2022_5_to_60_min) #ESTO ESTA BIEN PONERLO?
 #### Duración de los recorridos
 
 ```{r}
-#| label: trip_duration
-bike_trips_2022_5_to_60_min %>% 
-  mutate(duracion_recorrido = duracion_recorrido/60) %>% 
-  ggplot(mapping = aes(x = duracion_recorrido)) +
-  geom_histogram(colour = "#E6AC6E", fill = "beige", bins = 11) +
-  labs(x = "Duracion", y = "Cantidad", title = "Duracion de los recorridos en minutos")
+tabla
 ```
 
 ```{r}
-bike_trips_2022_5_to_60_min %>% 
-  mutate(duracion_recorrido = duracion_recorrido/60) %>% 
-  summarise("viaje promedio" = mean(duracion_recorrido), mediana = median(duracion_recorrido))
+promedio_y_mediana_de_viajes
 ```
 
 #### Fecha de recorridos
@@ -118,52 +109,30 @@ bike_trips_2022_5_to_60_min %>%
 (me gustaria separa por horario)
 
 ```{r}
-month_trip <- bike_trips_2022_5_to_60_min %>% 
-  select(fecha_origen_recorrido) %>% 
-  mutate(month = months(fecha_origen_recorrido))
+month_trip
 ```
 
 ```{r}
-month_trip %>% 
-  ggplot(mapping = aes(x = fct_relevel(month, c("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December")))) +
-  geom_bar(fill = "mintcream", colour = "lightskyblue") +
-  labs(x = "Mes", y = "Cantidad")
+trips_by_month 
 ```
 
 #### Estacion de Origen
 
 ```{r}
-bike_trips_2022_5_to_60_min %>% 
-  select(id_estacion_origen, nombre_estacion_origen) %>% 
-  group_by(id_estacion_origen, nombre_estacion_origen) %>% 
-  summarise(amount_by_station = n()) %>% 
-  arrange(desc(amount_by_station))
+origin_trip
 ```
 
 #### Estacion de Destino
 
 ```{r}
-bike_trips_2022_5_to_60_min %>% 
-  select(id_estacion_destino, nombre_estacion_destino) %>% 
-  group_by(id_estacion_destino, nombre_estacion_destino) %>% 
-  summarise(amount_by_station = n()) %>% 
-  arrange(desc(amount_by_station)) 
+destination_trip
 ```
 
 #### Viajes Mas comunes
 
 ```{r}
-bike_trips_2022_5_to_60_min %>% 
-  select(id_estacion_origen, nombre_estacion_origen, id_estacion_destino, nombre_estacion_destino) %>% 
-  group_by(id_estacion_origen, nombre_estacion_origen, id_estacion_destino, nombre_estacion_destino) %>% 
-  summarise(amount = n()) %>% 
-  arrange(desc(amount))
+common_trips
 ```
-
-
-
-
-
 
 #### Mapa Estaciones
 
@@ -213,64 +182,41 @@ buenos_aires_map + coord_quickmap()
 #### Modelo de Bicicleta
 
 ```{r}
-bike_trips_2022_5_to_60_min %>% 
-  select(modelo_bicicleta) %>% 
-  ggplot(mapping = aes(x = modelo_bicicleta, fill = modelo_bicicleta)) +
-  geom_bar()
+bike_type 
 ```
 
 #### Genero
 
 ```{r}
-bike_trips_2022_5_to_60_min %>% 
-  select(Género) %>% 
-  filter(!is.na(Género)) %>% 
-  ggplot(mapping = aes(x = Género, fill = Género)) + 
-  geom_bar()
+use_of_bikes_by_gender 
 ```
-
-
 
 ## ANÁLISIS DESCRIPTIVO DE DATAFRAME VIAJES DE CLIMA AEROPARQUE 2022
 
 ```{r}
-summary(clima_aeroparque_BA_2022)
+summary_weather
 ```
-
 
 Separamos por mes
+
 ```{r}
-month_climate <- clima_aeroparque_BA_2022 %>% 
-  mutate(month = months(date))
+month_climate
 ```
 
-
 #### Clima durante el year
+
 como hago para hacer una linea que pase por los puntos
+
 ```{r}
-month_climate %>% 
-  select(tmin, tmax, tavg, month) %>% 
-  group_by(month) %>% 
-  summarise(tmin_by_month = mean(tmin), tmax_by_month = mean(tmax), tavg_by_month = mean(tavg)) %>% 
-  ggplot(mapping = aes(x = fct_relevel(month, c("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December")), y = tmax_by_month)) +
-  geom_point(colour = "red", size = 4) +
-  geom_point(aes(x = fct_relevel(month, c("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December")), y = tmin_by_month), color = "blue", size = 4)
+grafico_temperatura_por_mes 
 
-month_climate %>% ggplot(mapping = aes(x = date, y = tmax)) +
-  geom_line(colour = "red") +
-  geom_line(aes(y = tmin), colour = "blue")
-
+grafico_temperatura_por_dia 
 ```
 
 #### Precipitaciones durante el year
+
 Fijarse si en febrero no hay datos atipicos
+
 ```{r}
-month_climate %>% 
-  group_by(month) %>% 
-  filter(!is.na(prcp)) %>% 
-  summarise(precipitation_by_month = mean(prcp)) %>% 
-  ggplot(mapping = aes(x = fct_relevel(month, c("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December")), y = precipitation_by_month)) +
-  geom_col(fill = "lightgoldenrod2", colour = "lightseagreen")
+precipitaciones_por_mes
 ```
-
-
