@@ -108,8 +108,10 @@ promedio_y_mediana_de_viajes
 
 ```{r}
 trips_by_month 
+trips_by_day
 trips_by_hour
 trips_by_month_and_hour
+trips_by_day_and_hour
 ```
 
 #### Estación de Origen
