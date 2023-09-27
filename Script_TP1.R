@@ -10,7 +10,6 @@ library(tidyverse)
 #Lectura de dataframes. Para leer los archivos csv usamos el comando read_csv.
 
 clima_aeroparque_BA_2022 <- read_csv("Data/Clima_Aeroparque_BA.csv")
-View(Clima_Aeroparque_BA)
 
 bike_trips_2022 <- read_csv("Data/trips_2022_reducido.csv")
 
