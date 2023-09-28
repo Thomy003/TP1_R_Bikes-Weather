@@ -10,7 +10,6 @@ library(tidyverse)
 #Lectura de dataframes. Para leer los archivos csv usamos el comando read_csv.
 
 clima_aeroparque_BA_2022 <- read_csv("Data/Clima_Aeroparque_BA.csv")
-View(Clima_Aeroparque_BA)
 
 bike_trips_2022 <- read_csv("Data/trips_2022_reducido.csv")
 
@@ -18,13 +17,25 @@ bike_trips_2022 <- read_csv("Data/trips_2022_reducido.csv")
 bike_trips_2022_5_to_60_min <- bike_trips_2022 %>% 
   filter(between(duracion_recorrido, left = 60*5, right = 60*60))
 
-#Dtaframe de bicis filtrado con 2 variables mas: mes y horario
-month_hour_bike_trips_2022_5_to_60_min <- bike_trips_2022_5_to_60_min %>% 
-  mutate(month = months(fecha_origen_recorrido), hour = hour(fecha_origen_recorrido))
+#Dtaframe de bicis filtrado con 3 variables mas: mes, dia de la semana y horario
+month_day_hour_bike_trips_2022_5_to_60_min <- bike_trips_2022_5_to_60_min %>% 
+  mutate(month = months(fecha_origen_recorrido), hour = hour(fecha_origen_recorrido), week_day = wday(fecha)) %>% 
+  mutate(week_day = case_when(week_day == 1 ~ "Sunday",
+                              week_day == 2 ~ "Monday",
+                              week_day == 3 ~ "Tuesday",
+                              week_day == 4 ~ "Wednesday",
+                              week_day == 5 ~ "Thursday",
+                              week_day == 6 ~ "Friday",
+                              week_day == 7 ~ "Saturday"))
+         
+
 
 #Dtaframe del clima con 1 variables mas: mes
 clima_aeroparque_BA_2022_bymonth <- clima_aeroparque_BA_2022 %>% 
-  mutate(month = months(date))
+  mutate(month = months(date)) 
+
+  
+  
 
 
 #Dataframe bike_trips_2022_5_to_60_min ----
@@ -45,23 +56,35 @@ promedio_y_mediana_de_viajes <-  bike_trips_2022_5_to_60_min %>%
   summarise("viaje promedio" = mean(duracion_recorrido), mediana = median(duracion_recorrido))
 
 #visualizacion de viajes por mes
-trips_by_month <- month_hour_bike_trips_2022_5_to_60_min %>% 
+trips_by_month <- month_day_hour_bike_trips_2022_5_to_60_min %>% 
   ggplot(mapping = aes(x = fct_relevel(month, c("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December")))) +
   geom_bar(fill = "mintcream", colour = "lightskyblue") +
   labs(x = "Mes", y = "Cantidad")
 
+#visualizacion de viajes por dia
+trips_by_day <- month_day_hour_bike_trips_2022_5_to_60_min %>% 
+  ggplot(mapping = aes(x = fct_relevel(week_day, c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"))))+
+  geom_bar(fill = "mintcream", colour = "lightskyblue")
+
 #visualizacion de viajes por hora
-trips_by_hour <- month_hour_bike_trips_2022_5_to_60_min %>% 
+trips_by_hour <- month_day_hour_bike_trips_2022_5_to_60_min %>% 
   ggplot(mapping = aes(x = hour)) +
   geom_bar(fill = "mintcream", colour = "lightskyblue") +
   labs(x = "Horario", y = "Cantidad")
 
 #visualizacion de viajes por mes y hora
-trips_by_month_and_hour <- month_hour_bike_trips_2022_5_to_60_min %>% 
+trips_by_month_and_hour <- month_day_hour_bike_trips_2022_5_to_60_min %>% 
   group_by(month) %>% 
   ggplot(mapping = aes(x = hour)) +
   geom_bar() +
   facet_wrap(~fct_relevel(month, c("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December")))
+
+#visualizacion de viajes por dia y hora
+trips_by_day_and_hour <- month_day_hour_bike_trips_2022_5_to_60_min %>% 
+  group_by(week_day) %>% 
+  ggplot(mapping = aes(x = hour)) +
+  geom_bar() +
+  facet_wrap(~fct_relevel(week_day, c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday")))
 
 #dataframe con la cantidad de estaciones de origen 
 origin_trip <- bike_trips_2022_5_to_60_min %>% 
