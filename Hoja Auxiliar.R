@@ -20,6 +20,7 @@ t <- bike_trips_2022_5_to_60_min %>%
 
 
 
+
 #MAPA
 #FORMA 1----
 #install.packages("mapproj")

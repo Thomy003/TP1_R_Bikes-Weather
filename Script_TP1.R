@@ -19,14 +19,7 @@ bike_trips_2022_5_to_60_min <- bike_trips_2022 %>%
 
 #Dtaframe de bicis filtrado con 3 variables mas: mes, dia de la semana y horario
 month_day_hour_bike_trips_2022_5_to_60_min <- bike_trips_2022_5_to_60_min %>% 
-  mutate(month = months(fecha_origen_recorrido), hour = hour(fecha_origen_recorrido), week_day = wday(fecha)) %>% 
-  mutate(week_day = case_when(week_day == 1 ~ "Sunday",
-                              week_day == 2 ~ "Monday",
-                              week_day == 3 ~ "Tuesday",
-                              week_day == 4 ~ "Wednesday",
-                              week_day == 5 ~ "Thursday",
-                              week_day == 6 ~ "Friday",
-                              week_day == 7 ~ "Saturday"))
+  mutate(month = months(fecha_origen_recorrido), hour = hour(fecha_origen_recorrido), week_day = weekdays(fecha))
          
 
 
