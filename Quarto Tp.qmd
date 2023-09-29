@@ -113,6 +113,11 @@ trips_by_hour
 trips_by_month_and_hour
 trips_by_day_and_hour
 ```
+#### Feriados vs no feriados
+```{r}
+viajes_promedio_feriados
+```
+
 
 #### Estación de Origen
 

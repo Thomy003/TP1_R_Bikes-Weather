@@ -19,9 +19,11 @@ bike_trips_2022_5_to_60_min <- bike_trips_2022 %>%
 
 #Dtaframe de bicis filtrado con 3 variables mas: mes, dia de la semana y horario
 month_day_hour_bike_trips_2022_5_to_60_min <- bike_trips_2022_5_to_60_min %>% 
-  mutate(month = months(fecha_origen_recorrido), hour = hour(fecha_origen_recorrido), week_day = weekdays(fecha))
+  mutate(month = months(fecha_origen_recorrido), 
+         hour = hour(fecha_origen_recorrido), 
+         week_day = weekdays(fecha),
+         es_feriado = (fecha %in% c("2022-01-01", "2022-02-28", "2022-03-01", "2022-03-24", "2022-04-02", "2022-04-14", "2022-04-15", "2022-04-16", "2022-04-17", "2022-04-22", "2022-04-23", "2022-04-24", "2022-05-01", "2022-05-02", "2022-05-18", "2022-05-25", "2022-06-17", "2022-06-20", "2022-07-09", "2022-07-30", "2022-08-15", "2022-09-26", "2022-09-27", "2022-10-05", "2022-10-07", "2022-10-10", "2022-11-20", "2022-11-21", "2022-12-08", "2022-12-09", "2022-12-25" )))
          
-
 
 #Dtaframe del clima con 1 variables mas: mes
 clima_aeroparque_BA_2022_bymonth <- clima_aeroparque_BA_2022 %>% 
@@ -112,6 +114,16 @@ use_of_bikes_by_gender <- bike_trips_2022_5_to_60_min %>%
   filter(!is.na(Género)) %>% 
   ggplot(mapping = aes(x = Género, fill = Género)) + 
   geom_bar()
+
+
+#uso de bicis dia comunes vs feriados
+#tenemos 31 feriados y (365 - 31) = 334 no feriados 
+uso_feriado_vs_no_feriado <- month_day_hour_bike_trips_2022_5_to_60_min %>% 
+  group_by(es_feriado) %>% 
+  summarise(cant_viajes = n())
+
+viajes_promedio_feriados <- c(uso_feriado_vs_no_feriado[1,2] / 334, uso_feriado_vs_no_feriado[2,2] / 31)
+
 
 
 #Dataframe clima_aeroparque_BA_2022 ----
