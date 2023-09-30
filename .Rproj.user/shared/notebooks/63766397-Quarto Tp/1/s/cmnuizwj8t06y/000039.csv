@@ -1,6 +1,0 @@
-"0","#| label: trip_duration"
-"0","bike_trips_2022_5_to_60_min %>% "
-"0","  mutate(duracion_recorrido = duracion_recorrido/60) %>% "
-"0","  ggplot(mapping = aes(x = duracion_recorrido)) +"
-"0","  geom_histogram(colour = ""#E6AC6E"", fill = ""beige"", bins = 11) +"
-"0","  labs(x = ""Duracion"", y = ""Cantidad"", title = ""Duracion de los recorridos en minutos"")"
