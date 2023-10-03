@@ -154,10 +154,7 @@ destination_trip
 common_trips
 ```
 
-<<<<<<< HEAD
-=======
 
->>>>>>> origin/master
 #### Modelo de Bicicleta
 
 ```{r}
@@ -178,8 +175,6 @@ use_of_bikes_by_gender
 summary_weather
 
 str(clima_aeroparque_BA_2022_bymonth_and_raintype)
-
-str(clima_aeroparque_BA_2022_bymonth)
 ```
 
 #### Clima durante el year
@@ -194,12 +189,6 @@ grafico_temperatura_por_mes
 ```{r}
 precipitaciones_por_mes
 grafico_dias_de_lluvias
-```
-
-### Uso de bicis by weather
-Notamos que este grafico en particular tiene un problema, las temperaturas promedias durante los 365 no se distribuyen de forma equitativa,por ejemplo es mucho mas comun tener un dia con promedio de 20 grados que un dia con promedio de 8 grados, entonces sumar el uso de bicis dependiendo de la temperatura promedio estaria sesgado.
-```{r}
-bikes_by_temp
 ```
 
 ### Uso de bicis by weather
