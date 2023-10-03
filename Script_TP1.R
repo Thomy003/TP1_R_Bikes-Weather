@@ -26,7 +26,11 @@ month_day_hour_bike_trips_2022_5_to_60_min <- bike_trips_2022_5_to_60_min %>%
          es_feriado = (fecha %in% c("2022-01-01", "2022-02-28", "2022-03-01", "2022-03-24", "2022-04-02", "2022-04-14", "2022-04-15", "2022-04-16", "2022-04-17", "2022-04-22", "2022-04-23", "2022-04-24", "2022-05-01", "2022-05-02", "2022-05-18", "2022-05-25", "2022-06-17", "2022-06-20", "2022-07-09", "2022-07-30", "2022-08-15", "2022-09-26", "2022-09-27", "2022-10-05", "2022-10-07", "2022-10-10", "2022-11-20", "2022-11-21", "2022-12-08", "2022-12-09", "2022-12-25" )))
          
 
+<<<<<<< HEAD
 #Dataframe del clima con 1 variables mas: mes
+=======
+#Dtaframe del clima con 1 variables mas: mes
+>>>>>>> origin/master
 clima_aeroparque_BA_2022_bymonth_and_raintype <- clima_aeroparque_BA_2022 %>% 
   mutate(month = months(date),
          rain = (prcp > 0),
@@ -36,6 +40,10 @@ clima_aeroparque_BA_2022_bymonth_and_raintype <- clima_aeroparque_BA_2022 %>%
                                  prcp > 16.0 & prcp <= 40.0 ~ "fuerte",
                                  prcp > 100.0 ~ "torrencial",
                                  .default = "no llovio")) 
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/master
 
   
   
@@ -44,7 +52,11 @@ clima_aeroparque_BA_2022_bymonth_and_raintype <- clima_aeroparque_BA_2022 %>%
 #Dataframe bike_trips_2022_5_to_60_min ----
 
 #esto es un resumen del datarframe de bicis con viajes entre 5 a 20 minutos
+<<<<<<< HEAD
 summary_bike_trips_2022_5_to_60_min <- summary(month_day_hour_bike_trips_2022_5_to_60_min)
+=======
+summary_bike_trips_2022_5_to_60_min <- summary(month_day_hour_bike_trips_2022_5_to_60_min) 
+>>>>>>> origin/master
 
 #visualizacion de viajes en minutos
 trips_duration_in_minutes <- bike_trips_2022_5_to_60_min %>% 
@@ -155,6 +167,7 @@ grafico_temperatura_por_mes <- clima_aeroparque_BA_2022_bymonth_and_raintype %>%
   labs(x = "Mes", y = "Temperatura")
 
 #grafico de temperaturas por dia
+<<<<<<< HEAD
 grafico_temperatura_por_dia <- clima_aeroparque_BA_2022_bymonth_and_raintype %>%
   pivot_longer(cols = 3:4, names_to = "tipo", values_to = "temp") %>%
   ggplot(mapping = aes(x = date, y = temp, color = tipo)) +
@@ -163,6 +176,11 @@ grafico_temperatura_por_dia <- clima_aeroparque_BA_2022_bymonth_and_raintype %>%
   labs(x = "Dia del año", y = "Temperatura max y min", color = "Temperatura") +
   theme_classic()
 
+=======
+grafico_temperatura_por_dia <- clima_aeroparque_BA_2022_bymonth_and_raintype %>% ggplot(mapping = aes(x = date, y = tmax)) +
+  geom_line(colour = "red") +
+  geom_line(aes(y = tmin), colour = "blue")
+>>>>>>> origin/master
 
 #precipitaciones por mes
 precipitaciones_por_mes <- clima_aeroparque_BA_2022_bymonth_and_raintype %>% 
@@ -170,9 +188,13 @@ precipitaciones_por_mes <- clima_aeroparque_BA_2022_bymonth_and_raintype %>%
   filter(!is.na(prcp)) %>% 
   summarise(precipitation_by_month = mean(prcp)) %>% 
   ggplot(mapping = aes(x = fct_relevel(month, c("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December")), y = precipitation_by_month)) +
+<<<<<<< HEAD
   geom_col(fill = "lightgoldenrod2", colour = "lightseagreen") +
   labs(x = "Mes",y = "Precipitacion por mes")
 
+=======
+  geom_col(fill = "lightgoldenrod2", colour = "lightseagreen")
+>>>>>>> origin/master
 
 #dias de lluvias
 grafico_dias_de_lluvias <- clima_aeroparque_BA_2022_bymonth_and_raintype %>% 
@@ -182,12 +204,18 @@ grafico_dias_de_lluvias <- clima_aeroparque_BA_2022_bymonth_and_raintype %>%
   ggplot(mapping = aes(x = rain, y = cant)) +
   geom_col()
 
+<<<<<<< HEAD
 
 
 #FULL JOIN DE DATAFRAMES
 bikes_and_weather <- full_join(month_day_hour_bike_trips_2022_5_to_60_min, clima_aeroparque_BA_2022_bymonth_and_raintype, by = "date")
 
 
+=======
+#FULL JOIN DE DATAFRAMES
+bikes_and_weather <- full_join(month_day_hour_bike_trips_2022_5_to_60_min, clima_aeroparque_BA_2022_bymonth_and_raintype, by = "date")
+
+>>>>>>> origin/master
 #uso de bicis por temperatura_promedio
 bikes_by_temp <- bikes_and_weather %>% 
   mutate(t_avg_round = round(tavg)) %>% 
@@ -196,20 +224,35 @@ bikes_by_temp <- bikes_and_weather %>%
   ggplot(mapping = aes(x = t_avg_round, y = viajes_por_tavg)) +
   geom_line()
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> origin/master
 #uso de bicis por precipitaciones
 uso_de_bicis_segun_precipitaciones <- bikes_and_weather %>% 
   filter(!is.na(prcp)) %>% 
   group_by(rain) %>% 
   summarise(viajes_promedios = n())
+<<<<<<< HEAD
 promedio_de_viajes_dias_lluviosos_vs_no <- c(uso_de_bicis_segun_precipitaciones[1,2]/266, uso_de_bicis_segun_precipitaciones[2,2]/97)
 
 
 #uso de bicis segun la potencialidad de lluvias
 grafico_de_uso_De_bicis_segun_lluvia <- clima_aeroparque_BA_2022_bymonth_and_raintype %>% 
+=======
+
+promedio_de_viajes_dias_lluviosos_vs_no <- c(uso_de_bicis_segun_precipitaciones[1,2]/266, uso_de_bicis_segun_precipitaciones[2,2]/97)
+
+#uso de bicis segun la potencialidad de lluvias
+grafico_de_uso_De_bicis_segun_lluvia <- bikes_and_weather_raintype %>% 
+>>>>>>> origin/master
   filter(tipo_lluvia != "no llovio") %>% 
   ggplot(mapping = aes(x = fct_relevel(tipo_lluvia, c("debil", "ligera", "moderada", "fuerte", "torrencial")))) +
   geom_bar()
 
 bikes_and_weather %>% select(fecha, tipo_lluvia) %>% distinct() %>% group_by(tipo_lluvia) %>% summarise(cant = n())
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/master
 bikes_and_weather %>% group_by(tipo_lluvia) %>% summarise(cant = n())
