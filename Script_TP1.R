@@ -129,6 +129,25 @@ use_of_bikes_by_gender <- bike_trips_2022_5_to_60_min %>%
   geom_bar() +
   labs(x = "Género", y = "Cantidad de recorridos")
 
+#uso de bicis por hora según género
+use_of_bikes_by_gender_per_hour <- month_day_hour_bike_trips_2022_5_to_60_min %>%
+  filter(!is.na(Género)) %>%
+  group_by(Género) %>%
+  mutate(cantidadTotalPorGénero = n()) %>%
+  group_by(Género,hour,cantidadTotalPorGénero) %>%
+  summarise(cantidad = n()) %>%
+  mutate(
+    cantidadPorcentual = case_when(
+      Género == "FEMALE" ~ (cantidad/cantidadTotalPorGénero)*100,
+      Género == "MALE" ~ (cantidad/cantidadTotalPorGénero)*100,
+      Género == "OTHER" ~ (cantidad/cantidadTotalPorGénero)*100
+    )
+  ) %>%
+  select(Género,cantidadPorcentual) %>%
+  ggplot(mapping = aes(x = hour, y = cantidadPorcentual, colour = Género)) +
+  geom_line() +
+  facet_wrap(~Género)
+
 
 #uso de bicis dia comunes vs feriados
 #tenemos 31 feriados y (365 - 31) = 334 no feriados 
@@ -137,6 +156,79 @@ uso_feriado_vs_no_feriado <- month_day_hour_bike_trips_2022_5_to_60_min %>%
   summarise(cant_viajes = n())
 
 viajes_promedio_feriados <- c(uso_feriado_vs_no_feriado[1,2] / 334, uso_feriado_vs_no_feriado[2,2] / 31)
+
+
+
+#uso de bicis en días desetacados del año (arbitrario) ----
+#para este caso seleccionamos arbitrariamente 8 días que están descritos en el informe.
+#(nota: cp indica la cantidad de personas)
+feriaLibro <- c("2022-04-28","2022-04-29","2022-04-30","2022-05-01","2022-05-02","2022-05-03","2022-05-04","2022-05-05","2022-05-06","2022-05-07","2022-05-08","2022-05-09","2022-05-10","2022-05-11","2022-05-12","2022-05-13","2022-05-14","2022-05-15","2022-05-16") #cp = 1.245.000
+comicCon <- c("2022-05-20","2022-05-21","2022-05-22") #cp = 80 mil
+duaLipa <- c("2022-09-13","2022-09-14") #cp = 50 mil
+marchaLGBTQI <- c("2022-10-05") #cp = 130 mil
+coldplay <- c("2022-10-25","2022-10-26","2022-10-28","2022-10-29","2022-11-01","2022-11-01","2022-11-02","2022-11-04","2022-11-05","2022-11-07","2022-11-08") #cp = 600 mil
+primaveraSound <- c("2022-11-12","2022-11-13") #cp = 100 mil
+finalMundial <- c("2022-12-18") #cp = 4 millones
+feriadoMundial <- c("2022-12-20") #cp = ??
+diasDestacados <- c(feriaLibro, comicCon, duaLipa, marchaLGBTQI, coldplay, primaveraSound, finalMundial, feriadoMundial)
+# Feria del libro
+bicisFeriaDelLibro <- month_day_hour_bike_trips_2022_5_to_60_min %>%
+  filter(fecha %in% feriaLibro) %>%
+  group_by(hour) %>%
+  summarise(cantidad = round(n()/length(feriaLibro)))
+# Comic Con
+bicisComicCon <- month_day_hour_bike_trips_2022_5_to_60_min %>%
+  filter(fecha %in% comicCon) %>%
+  group_by(hour) %>%
+  summarise(cantidad = round(n()/length(comicCon)))
+# Dua Lipa
+bicisDuaLipa <- month_day_hour_bike_trips_2022_5_to_60_min %>%
+  filter(fecha %in% duaLipa) %>%
+  group_by(hour) %>%
+  summarise(cantidad = round(n()/length(duaLipa)))
+# MarchaLGBT
+bicisMarchaLGBT <- month_day_hour_bike_trips_2022_5_to_60_min %>%
+  filter(fecha %in% marchaLGBTQI) %>%
+  group_by(hour) %>%
+  summarise(cantidad = round(n()/length(marchaLGBTQI)))
+# Coldplay
+bicisColdplay <- month_day_hour_bike_trips_2022_5_to_60_min %>%
+  filter(fecha %in% coldplay) %>%
+  group_by(hour) %>%
+  summarise(cantidad = round(n()/length(coldplay)))
+#PrimaveraSound
+bicisPrimSound <- month_day_hour_bike_trips_2022_5_to_60_min %>%
+  filter(fecha %in% primaveraSound) %>%
+  group_by(hour) %>%
+  summarise(cantidad = round(n()/length(primaveraSound)))
+# Mundial
+bicisFinalMundial <- month_day_hour_bike_trips_2022_5_to_60_min %>%
+  filter(fecha %in% finalMundial) %>%
+  group_by(hour) %>%
+  summarise(cantidad = round(n()/length(finalMundial)))
+# Feriado Mundial
+bicisFeriadoMundial <- month_day_hour_bike_trips_2022_5_to_60_min %>%
+  filter(fecha == feriadoMundial) %>%
+  group_by(hour) %>%
+  summarise(cantidad = round(n()/length(feriadoMundial)))
+# Este solamente es un dato orientativo para analizar los viajes en cada evento
+viajesPromedioFeriaLibro <- sum(bicisFeriaDelLibro$cantidad) # 24 viajes
+viajesPromedioComicCon <- sum(bicisComicCon$cantidad) # 17 viajes
+viajesPromedioDuaLipa <- sum(bicisDuaLipa$cantidad) # 44 viajes
+viajesPromedioLGBT <- sum(bicisMarchaLGBT$cantidad) # 48 viajes
+viajesPromedioColdplay <- sum(bicisColdplay$cantidad) # 31 viajes
+viajesPromedioPrimSound <- sum(bicisPrimSound$cantidad) # 9 viajes
+viajesPromedioMundial <- sum(bicisFinalMundial$cantidad) # 31 viajes
+viajesPromedioFeriadoMundial <- sum(bicisFeriadoMundial$cantidad) # 27 viajes
+# De mayor a menor, los eventos con mayor viajes promedio son: Marcha LGBT, concierto Dua Lipa, concierto Coldplay y Final del Mundial, Feria del libro, Comic Con y Primavera Sound
+# Generamos un data frame con los viajes realizados según cada evento
+dfViajesPromedioEventos <- data.frame(
+  evento = c("Feria del Libro","Comic Con","Dua Lipa","Marcha LGBT","Coldplay","Primavera Sound","Mundial","Feriado mundial"),
+  viajesPorEvento = c(viajesPromedioFeriaLibro,viajesPromedioComicCon,viajesPromedioDuaLipa,viajesPromedioLGBT,viajesPromedioColdplay,viajesPromedioPrimSound,viajesPromedioMundial,viajesPromedioFeriadoMundial)
+)
+graficoEventos <- dfViajesPromedioEventos %>%
+  ggplot(mapping = aes(x = evento, y = viajesPorEvento)) +
+  geom_col()
 
 
 

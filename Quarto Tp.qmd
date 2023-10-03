@@ -165,7 +165,14 @@ bike_type
 
 ```{r}
 use_of_bikes_by_gender 
+use_of_bikes_by_gender_per_hour
 ```
+
+#### Uso en días destacados del año
+```{r}
+graficoEventos
+```
+
 
 ------------------------------------------------------------------------
 
