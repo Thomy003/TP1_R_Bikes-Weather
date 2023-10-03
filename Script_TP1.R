@@ -145,9 +145,11 @@ use_of_bikes_by_gender_per_hour <- month_day_hour_bike_trips_2022_5_to_60_min %>
   ) %>%
   select(Género,cantidadPorcentual) %>%
   ggplot(mapping = aes(x = hour, y = cantidadPorcentual, colour = Género)) +
-  geom_line() +
-  facet_wrap(~Género)
-
+  geom_line(lwd = 1.49) + 
+  scale_x_continuous(expand = c(0,0)) +
+  scale_y_continuous(expand = c(0,0)) +
+  facet_wrap(~Género) +
+  theme(legend.position = "bottom")
 
 #uso de bicis dia comunes vs feriados
 #tenemos 31 feriados y (365 - 31) = 334 no feriados 
