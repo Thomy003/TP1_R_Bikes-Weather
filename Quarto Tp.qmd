@@ -46,51 +46,67 @@ Análisis general del nuevo dataframe de viajes en eco-bicis 2022.
 
 ```{r}
 summary_bike_trips_2022_5_to_60_min
+str(month_day_hour_bike_trips_2022_5_to_60_min)
 ```
 
 ### Variables del Dataframe
 
 ::: {style="color: white;"}
-"X.1" \--\>
 
-"X" \--\>
+"Id_recorrido" \--\> Identificador unico de cada recorrido
 
-"Id_recorrido" \--\>
+"duracion_recorrido" \--\> Duracion (en segundos) de cada recorrido
 
-"duracion_recorrido" \--\>
+"fecha_origen_recorrido" \--\> Dia y horario del momento en que se inicio el recorrido
 
-"fecha_origen_recorrido" \--\> establece la fecha y horario de inicio del viaje
+"id_estacion_origen" \--\> Identificador unico de la estacion donde se inicio el recorrido
 
-"id_estacion_origen" \--\>
+"nombre_estacion_origen" \--\> Nombre de la estacion donde se inicio el recorrido
 
-"nombre_estacion_origen" \--\>
+"direccion_estacion_origen" \--\> Direccion de la ubicacion de la estacion donde se inicio el recorrido
 
-"direccion_estacion_origen" \--\>
+"long_estacion_origen" \--\> Coordenadas longitudinales de la estacion donde se inicio el recorrido
 
-"long_estacion_origen" \--\>
+"lat_estacion_origen" \--\> Coordenadas latitudinales de la estacion donde se inicio el recorrido
 
-"lat_estacion_origen" \--\>
+"fecha_destino_recorrido" \--\> Dia y horario del momento en que se finalizo el recorrido
 
-"fecha_destino_recorrido" \--\>
+"id_estacion_destino" \--\> Identificador unico de la estacion donde se finalizo el recorrido
 
-"id_estacion_destino" \--\>
+"nombre_estacion_destino" \--\> Nombre de la estacion donde se finalizo el recorrido
 
-"nombre_estacion_destino" \--\>
+"direccion_estacion_destino" \--\> Direccion de la ubicacion de la estacion donde se finalizo el recorrido
 
-"direccion_estacion_destino" \--\>
+"long_estacion_destino" \--\> Coordenadas longitudinales de la estacion donde se finalizo el recorrido
 
-"long_estacion_destino" \--\>
+"lat_estacion_destino" \--\> Coordenadas latitudinales de la estacion donde se finalizo el recorrido
 
-"lat_estacion_destino" \--\>
+"id_usuario" \--\> Identidicador unico del usuario
 
-"id_usuario" \--\>
+"modelo_bicicleta" \--\> Modelo de la bicicleta (FIT/ICONIC)
 
-"modelo_bicicleta" \--\>
+"Género" \--\> Genero del usuario(Masculino - Femenino - Otro - NA)
 
-"Género" \--\>
-
-"fecha" \--\>
+"fecha" \--\> Fecha del momento en que se inicio el recorrido
 :::
+
+
+### Variables del Dataframe (clima_aeroparque_BA_2022)
+  
+::: {style="color: white;"}
+"date" \--\> Fecha de la medicion (AAAA-MM-DD)
+"tavg" \--\> Temperatura promedio (ºC)
+"tmax" \--\> Temperatura maxima (ºC)
+"tmin" \--\> Temperatura minima (ºC)
+"prcp" \--\> Precipitacion total (mm)
+"snow" \--\> Profundidad de la nieve (mm)
+"wdir" \--\> Direccion del viento (º)
+"wspd" \--\> Velocidad del viento promedio (km/h)
+"wpgt" \--\> Dias en que la velocidad promedio supero los 30km/h
+"pres" \--\> Presion del aire promedio (hpa)
+"tsun" \--\> BORRAR COLUMNA!!
+:::
+
 
 ### Visualización de Datos
 
@@ -137,51 +153,6 @@ destination_trip
 common_trips
 ```
 
-#### Mapa Estaciones
-
-(perguntar en clase como se haria un mapa)
-
-```{r}
-#install.packages("mapproj")
-library(mapproj)
-library(maps)
-
-coord_map(projection = "mercator",
-  xlim = 40,
-  ylim = 50)
-
-# Prepare a map of NZ
-#ggplot(map_data("world"), aes(x = long, y = lat, group = group)) +
- # geom_polygon(fill = "white", colour = "black") 
-
-#bike_trips_2022_5_to_60_min %>% 
- # select(long_estacion_origen, lat_estacion_origen) %>% 
- # distinct() %>% 
-  #ggplot(mapping = aes(x = long_estacion_origen, y = lat_estacion_origen)) + 
- # geom_point() + 
- # ggplot(map_data("world"), aes(x = long, y = lat, group = group)) +
- # geom_polygon(fill = "white", colour = "black") 
-```
-
-```{r}
-library(ggplot2)
-library(sf)
-
-# Load spatial data for Buenos Aires province (you may need to replace this with your own data)
-# This example uses a simplified shapefile of Buenos Aires province from the 'maps' package.
-# You can replace this with your own shapefile or spatial data source.
-buenos_aires <- st_read(system.file("shape/argentina/", "buenosaires.geojson", package = "sf"))
-
-# Create a ggplot map of Buenos Aires province
-buenos_aires_map <- ggplot(buenos_aires) +
-  geom_sf() +
-  labs(title = "Map of Buenos Aires Province, Argentina") +
-  theme_minimal()
-
-# Use coord_quickmap() to create the map with the appropriate aspect ratio
-buenos_aires_map + coord_quickmap()
-```
-
 #### Modelo de Bicicleta
 
 ```{r}
@@ -200,18 +171,25 @@ use_of_bikes_by_gender
 
 ```{r}
 summary_weather
+str(clima_aeroparque_BA_2022_bymonth_and_raintype)
 ```
 
 #### Clima durante el year
 
 ```{r}
+grafico_temperatura_por_dia
 grafico_temperatura_por_mes 
-
-grafico_temperatura_por_dia 
 ```
 
 #### Precipitaciones durante el year
 
 ```{r}
 precipitaciones_por_mes
+grafico_dias_de_lluvias
+```
+
+### Uso de bicis by weather
+Notamos que este grafico en particular tiene un problema, las temperaturas promedias durante los 365 no se distribuyen de forma equitativa,por ejemplo es mucho mas comun tener un dia con promedio de 20 grados que un dia con promedio de 8 grados, entonces sumar el uso de bicis dependiendo de la temperatura promedio estaria sesgado.
+```{r}
+bikes_by_temp
 ```
