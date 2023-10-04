@@ -23,7 +23,7 @@ v_marchaLGBTQI <- c("2022-10-05") #cp = 130 mil
 v_coldplay <- c("2022-10-25","2022-10-26","2022-10-28","2022-10-29","2022-11-01","2022-11-01","2022-11-02","2022-11-04","2022-11-05","2022-11-07","2022-11-08") #cp = 600 mil
 v_primaveraSound <- c("2022-11-12","2022-11-13") #cp = 100 mil
 v_finalMundial <- c("2022-12-18") #cp = 4 millones
-v_feriadoMundial <- c("2022-12-20") #cp = ??
+v_feriadoMundial <- c("2022-12-20") #cp = 5 millones
 
 v_diasDestacados <- c(v_feriaLibro, v_comicCon, v_duaLipa, v_marchaLGBTQI, v_coldplay, v_primaveraSound, v_finalMundial, v_feriadoMundial)
 #DATAFRAMES

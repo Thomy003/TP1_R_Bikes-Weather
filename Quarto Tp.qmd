@@ -6,6 +6,8 @@ subject: "Laboratorio de Datos"
 integrantes: "Salvador, Miguel, Thomas"
 format: html
 editor: visual
+  markdown: 
+    wrap: 72
 ---
 
 En este proyecto, nos propusimos analizar el uso de las Ecobici en el año 2022, y la manera en que fluctua su uso dependiendo de distintas caracteristicas como clima, temperatura, horas del dia, dia de la semana, genero de los usuarios, tipo de bici, eventos sociales, entre otros. El año pasado, se registraron un total de 3.000.000 de recorridos. De esta cantidad, se extrajo una muestra de 10.000 recorridos. Nuestro analisis va a ser basado en esta muestra.
@@ -14,21 +16,39 @@ En este proyecto, nos propusimos analizar el uso de las Ecobici en el año 2022,
 
 ## INFORMACIÓN SOBRE LAS LIBRERÍAS
 
-Para nuestra proyecto de análisis de datos, utilizaremos las librerías
+Para nuestra proyecto de análisis de datos, utilizaremos las librerías tidyverse y readr.
 
-tidyverse es un paquete que incluye librerías como ggplot2 (visualización de datos), dplyr (manipulación de datos), ...
+-   `tidyverse` es un conjunto de librerías que nos facilitan la manipulación y visualización de datos. De los paquetes vistos en clases están:
+    -   `ggplot2`es un paquete que nos permite crear gráficos de forma sencilla mediante la función `ggplot`, seleccionar el tipo de gráfico mediante `geom_*tipoDeGráfico*` y personalizar la estética de éstos mediante `theme`.
+    -   `dplyr` es un paquete de herramientos para la manipulación de datos, entre las cuales se encuentran funciones de filtrado, agregación y transformación.
+    -   `tidyr` es un paquete de funcioens que facilitan la manipulación de datos en formato "tidy", donde cada variable tiene su propia columna y cada fila corresponde a observaciones realizadas de cada variable.
+-   `readr` es una librería centrada en la lectura de datos de diferentes formatos (CSV, Excel, etc.) de manera eficiente.
 
 ------------------------------------------------------------------------
 
 ## INFORMACIÓN SOBRE LOS DATA FRAMES
 
-Durante esta investigación vamos a trabajar con dos dataframes relacionados al uso de Eco-bicis en CABA y el clima registrada en aeroparque, ambos registros son del ao 2022.
+Durante esta investigación vamos a trabajar con dos dataframes relacionados al uso de Eco-bicis en CABA y el clima registrada en aeroparque, cuya base de datos corresponde a datos recolectados durante el año 2022.
 
-Para este análisis solamente observaremos el comportamiento de aquellos registros cuya duración del viaje este entre 5 minutos a 1 hora, para evitar valores atípicos.
+-   Dataset *uso de EcoBicis en CABA*: Para el análisis de este dataset utilizaremos una muestra de diez mil viajes de los casi tres millones registrados. De dicha muestra, seleccionaremos solamente aquellos viajes de entre cinco y sesenta minutos (una hora). La muestra reducida utilizada fue proporcinada por la cátedra, la cual puede ser descargada [acá](https://ldd2023.netlify.app/tps/data/trips_2022_reducido.csv). La totalidad de datos de uso del sistema Ecobici de la CABA puede descargarse [acá](https://data.buenosaires.gob.ar/dataset/bicicletas-publicas/resource/4bb181ac-3259-4f05-a555-bec1d2c7fa1f).
+
+-   Dataset *MeteoStat-Aeroparque*: Esta base de datos corresponde a observaciones climáticas recolectadas por la estación meteorológica de Aeroparque desde el 1ro de enero de 2022 hasta el 31 de diciembre de 2022.
+
+Como los data frames utilizados se encuentran en formato `.csv`, utilizamos la librería `readr`.
 
 ------------------------------------------------------------------------
 
-## SCRIPTS
+## ARCHIVOS DEL PROYECTO
+
+El informe realizado está organizado mediante un archivo de formato `Rproj`, el cual contiene metadatos sobre el proyecto (nombre, directorio -carpta que contiene el proyecto-, librerías utilizadas, entre otros). La carpeta que contiene el proyecto: `TP1_R_Bikes-Weather`, contiene 3 archivos esenciales para la manipulación de datos, su análisis y el desarrollo de un informe:
+
+-   `Quarto TP.qmd`: Es un archivo de tipo Quarto en el cual se encuentra el informe realizado sobre el análisis exploratorio y descriptivo de los conjuntos de datos de interés.
+
+-   `Script_TP1.R`: Es un archivo de formato R que contiene el código esencial para la generación de recursos esenciales para el desarrollo del informe. Entre estos recursos se encuentran: variables de interes previamente establecidas, la importación del conjunto de datos contenidos en los archivos `.csv`, las librerías utilizadas y el tratamiento realizado sobre los data frames para la generación de diversos recursos.
+
+-   `Hoja Auxiliar.R`: ???
+
+Mediante la función `source` de R base, podemos ejecutar los archivos locales esenciales para la visualización de los datos mediante gráficos, tablas y data frames.
 
 ```{r}
 source(file = "Script_TP1.R", local = TRUE)
@@ -41,32 +61,10 @@ source(file = "Hoja Auxiliar.R", local = TRUE)
 ## INFORMACION SOBRE DATAFRAME VIAJES DE ECO-BICIS 2022
 
 ### Variables del Dataframe
+
 ::: {style="color: white;"}
-
-"Id_recorrido" \--\> Identificador unico de cada recorrido
-"duracion_recorrido" \--\> Duracion (en segundos) de cada recorrido
-"fecha_origen_recorrido" \--\> Dia y horario del momento en que se inicio el recorrido
-"id_estacion_origen" \--\> Identificador unico de la estacion donde se inicio el recorrido
-"nombre_estacion_origen" \--\> Nombre de la estacion donde se inicio el recorrido
-"direccion_estacion_origen" \--\> Direccion de la ubicacion de la estacion donde se inicio el recorrido
-"long_estacion_origen" \--\> Coordenadas longitudinales de la estacion donde se inicio el recorrido
-"lat_estacion_origen" \--\> Coordenadas latitudinales de la estacion donde se inicio el recorrido
-"fecha_destino_recorrido" \--\> Dia y horario del momento en que se finalizo el recorrido
-"id_estacion_destino" \--\> Identificador unico de la estacion donde se finalizo el recorrido
-"nombre_estacion_destino" \--\> Nombre de la estacion donde se finalizo el recorrido
-"direccion_estacion_destino" \--\> Direccion de la ubicacion de la estacion donde se finalizo el recorrido
-"long_estacion_destino" \--\> Coordenadas longitudinales de la estacion donde se finalizo el recorrido
-"lat_estacion_destino" \--\> Coordenadas latitudinales de la estacion donde se finalizo el recorrido
-"id_usuario" \--\> Identidicador unico del usuario
-"modelo_bicicleta" \--\> Modelo de la bicicleta (FIT/ICONIC)
-"Género" \--\> Genero del usuario(Masculino - Femenino - Otro - NA)
-"Date" \--\> Fecha del momento en que se inicio el recorrido (en el dataframe original esta variable tenia el nombre fecha, pero lo modificamos para cuando luego hagamos el join entre dataframes tengamos las keys de las columnas con los mismo nombres)
-"Month" \--\> Mes de fecha de origen de recorrido
-"Hour" \--\> Horario de fecha de origen de recorrido
-"Week_day" \--\> Dia de la semana del origen de recorrido
-"Public_holiday" \--\> El dia del recorrido era feriado?
+"Id_recorrido" \--\> Identificador unico de cada recorrido "duracion_recorrido" \--\> Duracion (en segundos) de cada recorrido "fecha_origen_recorrido" \--\> Dia y horario del momento en que se inicio el recorrido "id_estacion_origen" \--\> Identificador unico de la estacion donde se inicio el recorrido "nombre_estacion_origen" \--\> Nombre de la estacion donde se inicio el recorrido "direccion_estacion_origen" \--\> Direccion de la ubicacion de la estacion donde se inicio el recorrido "long_estacion_origen" \--\> Coordenadas longitudinales de la estacion donde se inicio el recorrido "lat_estacion_origen" \--\> Coordenadas latitudinales de la estacion donde se inicio el recorrido "fecha_destino_recorrido" \--\> Dia y horario del momento en que se finalizo el recorrido "id_estacion_destino" \--\> Identificador unico de la estacion donde se finalizo el recorrido "nombre_estacion_destino" \--\> Nombre de la estacion donde se finalizo el recorrido "direccion_estacion_destino" \--\> Direccion de la ubicacion de la estacion donde se finalizo el recorrido "long_estacion_destino" \--\> Coordenadas longitudinales de la estacion donde se finalizo el recorrido "lat_estacion_destino" \--\> Coordenadas latitudinales de la estacion donde se finalizo el recorrido "id_usuario" \--\> Identidicador unico del usuario "modelo_bicicleta" \--\> Modelo de la bicicleta (FIT/ICONIC) "Género" \--\> Genero del usuario(Masculino - Femenino - Otro - NA) "Date" \--\> Fecha del momento en que se inicio el recorrido (en el dataframe original esta variable tenia el nombre fecha, pero lo modificamos para cuando luego hagamos el join entre dataframes tengamos las keys de las columnas con los mismo nombres) "Month" \--\> Mes de fecha de origen de recorrido "Hour" \--\> Horario de fecha de origen de recorrido "Week_day" \--\> Dia de la semana del origen de recorrido "Public_holiday" \--\> El dia del recorrido era feriado?
 :::
-
 
 Comenzamos mostrando una visualización del dataframe, con el que vamos a trabajar, analizar y elaborar hipotesis.
 
@@ -74,22 +72,22 @@ Comenzamos mostrando una visualización del dataframe, con el que vamos a trabaj
 head(month_day_hour_bike_trips_2022_5_to_60_min)
 ```
 
-
 Análisis general del nuevo dataframe de viajes en eco-bicis 2022. Para este análisis general usamos las funciones summary() y str() que nos brindaron información general sobre el dataframe que vamos a analizar, como sus tipos de datos, valores minimos, maximos, medias, entre otros valores redundantes.
 
 ```{r}
 summary(df_bike_trips_2022_reformed)
 ```
+
 ```{r}
 str(df_bike_trips_2022_reformed)
 ```
 
-
-
 ## ANÁLISIS DESCRIPTIVO DE VIAJES DE ECO-BICIS 2022
 
 #### Duración de los recorridos
-Con este grafico queremos mostrar  la cantidad de recorridos que hubieron para cada duracion (en minutos) posible
+
+Con este grafico queremos mostrar la cantidad de recorridos que hubieron para cada duracion (en minutos) posible
+
 ```{r}
 gr_trips_duration_in_minutes_box
 gr_trips_duration_in_minutes_by_gender
@@ -101,6 +99,7 @@ df_promedio_y_mediana_de_viajes
 ```
 
 #### Fecha de recorridos
+
 En los siguentes graficos, buscamos mostrar la cantidad de recorridos realizados durante distintos lapsos de tiempos tales como meses, dias y horarios
 
 ```{r}
@@ -135,8 +134,8 @@ df_destination_trip
 df_common_trips
 ```
 
-
 #### Modelo de Bicicleta
+
 A continuacion, se encuentra el grafico que diferencia la cantidad de recorridos que se realizaron con la bici ICONIC y la FIT
 
 ```{r}
@@ -144,42 +143,29 @@ gr_bike_type
 ```
 
 #### Genero
+
 Este grafico, muestra la cantidad de recorridos que fueron realizados por hombres , mujeres y otros
+
 ```{r}
 gr_use_of_bikes_by_gender 
 gr_use_of_bikes_by_gender_per_hour
 ```
 
 #### Uso en días destacados del año
+
 ```{r}
 graficoEventos
 ```
-
 
 ------------------------------------------------------------------------
 
 ## ANÁLISIS DESCRIPTIVO DE DATAFRAME VIAJES DE CLIMA AEROPARQUE 2022
 
 ### Variables del Dataframe (clima_aeroparque_BA_2022)
-  
+
 ::: {style="color: white;"}
-"date" \--\> Fecha de la medicion (AAAA-MM-DD)
-"tavg" \--\> Temperatura promedio (ºC)
-"tmax" \--\> Temperatura maxima (ºC)
-"tmin" \--\> Temperatura minima (ºC)
-"prcp" \--\> Precipitacion total (mm)
-"snow" \--\> Profundidad de la nieve (mm)
-"wdir" \--\> Direccion del viento (º)
-"wspd" \--\> Velocidad del viento promedio (km/h)
-"wpgt" \--\> Dias en que la velocidad promedio supero los 30km/h
-"pres" \--\> Presion del aire promedio (hpa)
-"tsun" \--\> Duracion del sol (NA)
-"month" \--\> Mes de la fecha de la observacion
-"is_rain" \--\> Hubo precipitaciones en la observacion?
-"rain_stregth" \--\> Potencia de la lluvia
+"date" \--\> Fecha de la medicion (AAAA-MM-DD) "tavg" \--\> Temperatura promedio (ºC) "tmax" \--\> Temperatura maxima (ºC) "tmin" \--\> Temperatura minima (ºC) "prcp" \--\> Precipitacion total (mm) "snow" \--\> Profundidad de la nieve (mm) "wdir" \--\> Direccion del viento (º) "wspd" \--\> Velocidad del viento promedio (km/h) "wpgt" \--\> Dias en que la velocidad promedio supero los 30km/h "pres" \--\> Presion del aire promedio (hpa) "tsun" \--\> Duracion del sol (NA) "month" \--\> Mes de la fecha de la observacion "is_rain" \--\> Hubo precipitaciones en la observacion? "rain_stregth" \--\> Potencia de la lluvia
 :::
-
-
 
 ```{r}
 summary(df_clima_aeroparque_BA_2022_reformed)
@@ -188,13 +174,16 @@ str(df_clima_aeroparque_BA_2022_reformed)
 ```
 
 #### Clima durante el year
+
 El siguiente grafico muestra la temperatura maxima y minima de cada dia del 2022
+
 ```{r}
 gr_temperatura_por_dia
 gr_temperatura_por_mes 
 ```
 
 #### Precipitaciones durante el year
+
 se encuentra el grafico demostrativo de las precipitaciones (en mm) de cada mes
 
 ```{r}
@@ -202,18 +191,17 @@ gr_precipitaciones_por_mes
 ```
 
 ### Uso de bicis by weather
+
 Notamos que este grafico en particular tiene un problema, las temperaturas promedias durante los 365 no se distribuyen de forma equitativa,por ejemplo es mucho mas comun tener un dia con promedio de 20 grados que un dia con promedio de 8 grados, entonces sumar el uso de bicis dependiendo de la temperatura promedio estaria sesgado.
+
 ```{r}
 gr_bikes_by_temp
 ```
-
 
 ```{r}
 gr_uso_de_bicis_segun_precipitaciones
 ```
 
-
 ```{r}
 gr_de_uso_De_bicis_segun_lluvia
 ```
-
