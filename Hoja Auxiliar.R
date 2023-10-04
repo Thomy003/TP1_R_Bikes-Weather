@@ -20,6 +20,7 @@ t <- bike_trips_2022_5_to_60_min %>%
 
 
 
+
 #MAPA
 #FORMA 1----
 #install.packages("mapproj")
@@ -81,7 +82,7 @@ t <- bike_trips_2022_5_to_60_min %>%
 
 #fct_relevel() -> permite modificar el orden en que aparecen las categorias en el geom_bar
 
-
+#wday() -> recibe un valor de tipo date retorna un numero entre 1 a 7 donde 1 es domingo, 2 es lunes, ...
 
 
 
