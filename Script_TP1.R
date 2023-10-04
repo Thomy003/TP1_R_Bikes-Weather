@@ -1,38 +1,59 @@
+#CONSIDERACIONES ----
 
-#Librerias ----
+#1. Nuestras PC's trabajan con algunas variables en ingles y no en español, entonces si surgen problemas con el fct_level por ejemplo, es porque nosotros ordenamos las categorías en ingles y no español.
+
+#2. Para tener una compresión mas rápida de los nombres de variables, utilizamos los siguientes prefijos "df_" para referirnos a un dataframe, "gr_" para referirnos a un gráfico y "v_" para referirnos a una variable.
+
+
+#LIBRERIAS ----
 library(readr)
 library(tidyverse)
 
 
+#VARIABLES ----
 
-#Dataframes ----
+#Las fechas de los días feriados de Argentina 2022 los obtuvimos de la siguiente pagina: https://www.argentina.gob.ar/interior/feriados-nacionales-2022
+v_feriados <- c("2022-01-01", "2022-02-28", "2022-03-01", "2022-03-24", "2022-04-02", "2022-04-14", "2022-04-15", "2022-04-16", "2022-04-17", "2022-04-22", "2022-04-23", "2022-04-24", "2022-05-01", "2022-05-02", "2022-05-18", "2022-05-25", "2022-06-17", "2022-06-20", "2022-07-09", "2022-07-30", "2022-08-15", "2022-09-26", "2022-09-27", "2022-10-05", "2022-10-07", "2022-10-10", "2022-11-20", "2022-11-21", "2022-12-08", "2022-12-09", "2022-12-25")
+
+#(nota: cp indica la cantidad de personas)
+v_feriaLibro <- c("2022-04-28","2022-04-29","2022-04-30","2022-05-01","2022-05-02","2022-05-03","2022-05-04","2022-05-05","2022-05-06","2022-05-07","2022-05-08","2022-05-09","2022-05-10","2022-05-11","2022-05-12","2022-05-13","2022-05-14","2022-05-15","2022-05-16") #cp = 1.245.000
+v_comicCon <- c("2022-05-20","2022-05-21","2022-05-22") #cp = 80 mil
+v_duaLipa <- c("2022-09-13","2022-09-14") #cp = 50 mil
+v_marchaLGBTQI <- c("2022-10-05") #cp = 130 mil
+v_coldplay <- c("2022-10-25","2022-10-26","2022-10-28","2022-10-29","2022-11-01","2022-11-01","2022-11-02","2022-11-04","2022-11-05","2022-11-07","2022-11-08") #cp = 600 mil
+v_primaveraSound <- c("2022-11-12","2022-11-13") #cp = 100 mil
+v_finalMundial <- c("2022-12-18") #cp = 4 millones
+v_feriadoMundial <- c("2022-12-20") #cp = ??
+
+v_diasDestacados <- c(v_feriaLibro, v_comicCon, v_duaLipa, v_marchaLGBTQI, v_coldplay, v_primaveraSound, v_finalMundial, v_feriadoMundial)
+#DATAFRAMES
+#Dataframes_originales ----
 
 #Lectura de dataframes. Para leer los archivos csv usamos el comando read_csv.
 
-clima_aeroparque_BA_2022 <- read_csv("Data/Clima_Aeroparque_BA.csv")
+df_clima_aeroparque_BA_2022 <- read_csv("Data/Clima_Aeroparque_BA.csv")
 
-bike_trips_2022 <- read_csv("Data/trips_2022_reducido.csv")
+df_bike_trips_2022 <- read_csv("Data/trips_2022_reducido.csv")
 
-#Filtramos el dataframe de bicis
-bike_trips_2022_5_to_60_min <- bike_trips_2022 %>% 
-  filter(between(duracion_recorrido, left = 60*5, right = 60*60))
 
-#Dtaframe de bicis filtrado con 3 variables mas: mes, dia de la semana y horario
-month_day_hour_bike_trips_2022_5_to_60_min <- bike_trips_2022_5_to_60_min %>% 
-  mutate(date = fecha,
-         month = months(fecha_origen_recorrido), 
+#Dataframes_bicis_modificado ----
+#Dataframe de bicis filtrado por duración del recorrido, con 4 variables mas ("month", "week_day", "hour" y "public_holiday") y la variable fecha renombrada a date.
+
+df_bike_trips_2022_reformed <- df_bike_trips_2022 %>% 
+  filter(between(duracion_recorrido, left = 60*5, right = 60*60)) %>% 
+  rename(date = fecha) %>% 
+  mutate(month = months(fecha_origen_recorrido), 
          hour = hour(fecha_origen_recorrido), 
-         week_day = weekdays(fecha),
-         es_feriado = (fecha %in% c("2022-01-01", "2022-02-28", "2022-03-01", "2022-03-24", "2022-04-02", "2022-04-14", "2022-04-15", "2022-04-16", "2022-04-17", "2022-04-22", "2022-04-23", "2022-04-24", "2022-05-01", "2022-05-02", "2022-05-18", "2022-05-25", "2022-06-17", "2022-06-20", "2022-07-09", "2022-07-30", "2022-08-15", "2022-09-26", "2022-09-27", "2022-10-05", "2022-10-07", "2022-10-10", "2022-11-20", "2022-11-21", "2022-12-08", "2022-12-09", "2022-12-25" )))
+         week_day = weekdays(date),
+         public_holiday = (date %in% v_feriados))
          
+#Dataframes_clima_modificado ----
+#Dataframe del clima con 3 variables mas("month", "is_rain", "rain_strength")
 
-
-#Dataframe del clima con 1 variables mas: mes
-
-clima_aeroparque_BA_2022_bymonth_and_raintype <- clima_aeroparque_BA_2022 %>% 
+df_clima_aeroparque_BA_2022_reformed <- df_clima_aeroparque_BA_2022 %>% 
   mutate(month = months(date),
-         rain = (prcp > 0),
-         tipo_lluvia = case_when(prcp > 0 & prcp <= 3 ~ "debil",
+         is_rain = (prcp > 0),
+         rain_strength = case_when(prcp > 0 & prcp <= 3 ~ "debil",
                                  prcp > 3.0 & prcp <= 6.5 ~ "ligera",
                                  prcp > 6.5 & prcp <= 16.0 ~ "moderada",
                                  prcp > 16.0 & prcp <= 40.0 ~ "fuerte",
@@ -42,43 +63,61 @@ clima_aeroparque_BA_2022_bymonth_and_raintype <- clima_aeroparque_BA_2022 %>%
 
 
 
-#Dataframe bike_trips_2022_5_to_60_min ----
+#Dataframe_joined ----
+#FULL JOIN DE DATAFRAMES
+df_bikes_and_weather <- full_join(df_bike_trips_2022_reformed, df_clima_aeroparque_BA_2022_reformed, by = "date")
 
-#esto es un resumen del datarframe de bicis con viajes entre 5 a 20 minutos
-summary_bike_trips_2022_5_to_60_min <- summary(month_day_hour_bike_trips_2022_5_to_60_min)
+#Dataframes Descriptivos ----
+#dataframe con la duracion de viaje promedio y mediana
+df_promedio_y_mediana_de_viajes <-  df_bike_trips_2022_reformed %>% 
+  mutate(duracion_recorrido = duracion_recorrido/60) %>% 
+  summarise("promedio duracion de viaje" = mean(duracion_recorrido), "mediana de la duracion de viajes" = median(duracion_recorrido))
 
+
+#GRAFICOS ----
+
+#Dataframe df_bike_trips_2022_reformed
 #visualizacion de viajes en minutos
-trips_duration_in_minutes <- bike_trips_2022_5_to_60_min %>% 
+gr_trips_duration_in_minutes_col <- df_bike_trips_2022_reformed %>% 
   mutate(duracion_recorrido = duracion_recorrido/60) %>% 
   ggplot(mapping = aes(x = duracion_recorrido)) +
   geom_histogram(colour = "#E6AC6E", fill = "beige", bins = 11) +
   labs(x = "Duracion", y = "Cantidad de Recorridos", title = "Duracion de los recorridos en minutos")
 
-#dataframe con el viaje promedio y la mediana
-promedio_y_mediana_de_viajes <-  bike_trips_2022_5_to_60_min %>% 
+gr_trips_duration_in_minutes_box <- df_bike_trips_2022_reformed %>% 
   mutate(duracion_recorrido = duracion_recorrido/60) %>% 
-  summarise("viaje promedio" = mean(duracion_recorrido), mediana = median(duracion_recorrido))
+  ggplot(mapping = aes(y = duracion_recorrido)) +
+  geom_boxplot(color = "#E6AC6E") +
+  labs(y = "Duracion", title = "Duracion de los recorridos en minutos") +
+  scale_x_discrete(expand = c(0,0))
+
+gr_trips_duration_in_minutes_by_gender <- df_bike_trips_2022_reformed %>% 
+  filter(!is.na(Género)) %>% 
+  mutate(duracion_recorrido = duracion_recorrido/60) %>% 
+  ggplot(mapping = aes(y = duracion_recorrido, x = Género, color = Género)) +
+  geom_boxplot() +
+  labs(y = "Duracion", title = "Duracion de los recorridos en minutos")
 
 #visualizacion de viajes por mes
-trips_by_month <- month_day_hour_bike_trips_2022_5_to_60_min %>% 
+gr_trips_by_month <- df_bike_trips_2022_reformed %>% 
   ggplot(mapping = aes(x = fct_relevel(month, c("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December")))) +
   geom_bar(fill = "mintcream", colour = "lightskyblue") +
   labs(x = "Mes", y = "Cantidad de Recorridos")
 
 #visualizacion de viajes por dia
-trips_by_day <- month_day_hour_bike_trips_2022_5_to_60_min %>% 
+gr_trips_by_day <- df_bike_trips_2022_reformed %>% 
   ggplot(mapping = aes(x = fct_relevel(week_day, c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"))))+
   geom_bar(fill = "mintcream", colour = "lightskyblue") +
   labs(x = "Dia de la semana", y = "Cantidad de recorridos")
 
 #visualizacion de viajes por hora
-trips_by_hour <- month_day_hour_bike_trips_2022_5_to_60_min %>% 
+gr_trips_by_hour <- df_bike_trips_2022_reformed %>% 
   ggplot(mapping = aes(x = hour)) +
   geom_bar(fill = "mintcream", colour = "lightskyblue") +
   labs(x = "Horario", y = "Cantidad de recorridos") 
 
 #visualizacion de viajes por mes y hora
-trips_by_month_and_hour <- month_day_hour_bike_trips_2022_5_to_60_min %>% 
+gr_trips_by_month_and_hour <- df_bike_trips_2022_reformed %>% 
   group_by(month) %>% 
   ggplot(mapping = aes(x = hour)) +
   geom_bar(fill = "mintcream",color = "lightskyblue") +
@@ -86,7 +125,7 @@ trips_by_month_and_hour <- month_day_hour_bike_trips_2022_5_to_60_min %>%
   labs(x = "Horario", y = "Cantidad de recorridos")
 
 #visualizacion de viajes por dia y hora
-trips_by_day_and_hour <- month_day_hour_bike_trips_2022_5_to_60_min %>% 
+gr_trips_by_day_and_hour <- df_bike_trips_2022_reformed %>% 
   group_by(week_day) %>% 
   ggplot(mapping = aes(x = hour)) +
   geom_bar(fill = "mintcream",color = "lightskyblue") +
@@ -94,35 +133,35 @@ trips_by_day_and_hour <- month_day_hour_bike_trips_2022_5_to_60_min %>%
   labs(x = "Horario", y = "Cantidad de recorridos")
 
 #dataframe con la cantidad de estaciones de origen 
-origin_trip <- bike_trips_2022_5_to_60_min %>% 
+df_origin_trip <- df_bike_trips_2022_reformed %>% 
   select(id_estacion_origen, nombre_estacion_origen) %>% 
   group_by(id_estacion_origen, nombre_estacion_origen) %>% 
   summarise(amount_by_station = n()) %>% 
   arrange(desc(amount_by_station))
 
 #dataframe con la cantidad de estaciones de llegada
-destination_trip <- bike_trips_2022_5_to_60_min %>% 
+df_destination_trip <- df_bike_trips_2022_reformed %>% 
   select(id_estacion_destino, nombre_estacion_destino) %>% 
   group_by(id_estacion_destino, nombre_estacion_destino) %>% 
   summarise(amount_by_station = n()) %>% 
   arrange(desc(amount_by_station)) 
 
 #viajes mas comunes
-common_trips <- bike_trips_2022_5_to_60_min %>% 
+df_common_trips <- df_bike_trips_2022_reformed %>% 
   select(id_estacion_origen, nombre_estacion_origen, id_estacion_destino, nombre_estacion_destino) %>% 
   group_by(id_estacion_origen, nombre_estacion_origen, id_estacion_destino, nombre_estacion_destino) %>% 
   summarise(amount = n()) %>% 
   arrange(desc(amount))
 
 #tipo de bici
-bike_type <- bike_trips_2022_5_to_60_min %>% 
+gr_bike_type <- df_bike_trips_2022_reformed %>% 
   select(modelo_bicicleta) %>% 
   ggplot(mapping = aes(x = modelo_bicicleta, fill = modelo_bicicleta)) +
   geom_bar() +
   labs(x = "Modelo de bicicleta", y = "Cantidad de recorridos")
 
 #uso de bicis por genero
-use_of_bikes_by_gender <- bike_trips_2022_5_to_60_min %>% 
+gr_use_of_bikes_by_gender <- df_bike_trips_2022_reformed %>% 
   select(Género) %>% 
   filter(!is.na(Género)) %>% 
   ggplot(mapping = aes(x = Género, fill = Género)) + 
@@ -130,7 +169,7 @@ use_of_bikes_by_gender <- bike_trips_2022_5_to_60_min %>%
   labs(x = "Género", y = "Cantidad de recorridos")
 
 #uso de bicis por hora según género
-use_of_bikes_by_gender_per_hour <- month_day_hour_bike_trips_2022_5_to_60_min %>%
+gr_use_of_bikes_by_gender_per_hour <- df_bike_trips_2022_reformed %>%
   filter(!is.na(Género)) %>%
   group_by(Género) %>%
   mutate(cantidadTotalPorGénero = n()) %>%
@@ -151,68 +190,67 @@ use_of_bikes_by_gender_per_hour <- month_day_hour_bike_trips_2022_5_to_60_min %>
   facet_wrap(~Género) +
   theme(legend.position = "bottom")
 
+
 #uso de bicis dia comunes vs feriados
 #tenemos 31 feriados y (365 - 31) = 334 no feriados 
-uso_feriado_vs_no_feriado <- month_day_hour_bike_trips_2022_5_to_60_min %>% 
-  group_by(es_feriado) %>% 
-  summarise(cant_viajes = n())
+df_uso_feriado_vs_no_feriado <- df_bike_trips_2022_reformed %>% 
+  group_by(public_holiday) %>% 
+  summarise(cant_viajes = n()) %>% 
+  group_by(public_holiday) %>% 
+  summarise(prom_viajes = if(public_holiday == TRUE){prom_feriado = uso_feriado_vs_no_feriado[2,2] / 31}else{df_uso_feriado_vs_no_feriado[1,2] / 334})
 
-viajes_promedio_feriados <- c(uso_feriado_vs_no_feriado[1,2] / 334, uso_feriado_vs_no_feriado[2,2] / 31)
-
+                                            
+gr_viajes_promedio_feriados <- df_uso_feriado_vs_no_feriado %>% 
+  ggplot(mapping = aes(x = public_holiday, y = prom_viajes$cant_viajes, color = public_holiday)) + 
+  geom_col(fill = "white") +
+  labs(x = "Dia Feriado", y = "Cantidad", title = "Cantidad de viajes diarios por feriados y no feriados")
 
 
 #uso de bicis en días desetacados del año (arbitrario) ----
 #para este caso seleccionamos arbitrariamente 8 días que están descritos en el informe.
-#(nota: cp indica la cantidad de personas)
-feriaLibro <- c("2022-04-28","2022-04-29","2022-04-30","2022-05-01","2022-05-02","2022-05-03","2022-05-04","2022-05-05","2022-05-06","2022-05-07","2022-05-08","2022-05-09","2022-05-10","2022-05-11","2022-05-12","2022-05-13","2022-05-14","2022-05-15","2022-05-16") #cp = 1.245.000
-comicCon <- c("2022-05-20","2022-05-21","2022-05-22") #cp = 80 mil
-duaLipa <- c("2022-09-13","2022-09-14") #cp = 50 mil
-marchaLGBTQI <- c("2022-10-05") #cp = 130 mil
-coldplay <- c("2022-10-25","2022-10-26","2022-10-28","2022-10-29","2022-11-01","2022-11-01","2022-11-02","2022-11-04","2022-11-05","2022-11-07","2022-11-08") #cp = 600 mil
-primaveraSound <- c("2022-11-12","2022-11-13") #cp = 100 mil
-finalMundial <- c("2022-12-18") #cp = 4 millones
-feriadoMundial <- c("2022-12-20") #cp = ??
-diasDestacados <- c(feriaLibro, comicCon, duaLipa, marchaLGBTQI, coldplay, primaveraSound, finalMundial, feriadoMundial)
+
 # Feria del libro
-bicisFeriaDelLibro <- month_day_hour_bike_trips_2022_5_to_60_min %>%
-  filter(fecha %in% feriaLibro) %>%
+bicisFeriaDelLibro <- df_bike_trips_2022_reformed %>%
+  filter(date %in% v_feriaLibro) %>%
   group_by(hour) %>%
-  summarise(cantidad = round(n()/length(feriaLibro)))
+  summarise(cantidad = round(n()/length(v_feriaLibro)))
 # Comic Con
-bicisComicCon <- month_day_hour_bike_trips_2022_5_to_60_min %>%
-  filter(fecha %in% comicCon) %>%
+bicisComicCon <- df_bike_trips_2022_reformed %>%
+  filter(date %in% v_comicCon) %>%
   group_by(hour) %>%
-  summarise(cantidad = round(n()/length(comicCon)))
+  summarise(cantidad = round(n()/length(v_comicCon)))
 # Dua Lipa
-bicisDuaLipa <- month_day_hour_bike_trips_2022_5_to_60_min %>%
-  filter(fecha %in% duaLipa) %>%
+bicisDuaLipa <- df_bike_trips_2022_reformed %>%
+  filter(date %in% v_duaLipa) %>%
   group_by(hour) %>%
-  summarise(cantidad = round(n()/length(duaLipa)))
+  summarise(cantidad = round(n()/length(v_duaLipa)))
 # MarchaLGBT
-bicisMarchaLGBT <- month_day_hour_bike_trips_2022_5_to_60_min %>%
-  filter(fecha %in% marchaLGBTQI) %>%
+bicisMarchaLGBT <- df_bike_trips_2022_reformed %>%
+  filter(date %in% v_marchaLGBTQI) %>%
   group_by(hour) %>%
-  summarise(cantidad = round(n()/length(marchaLGBTQI)))
+  summarise(cantidad = round(n()/length(v_marchaLGBTQI)))
 # Coldplay
-bicisColdplay <- month_day_hour_bike_trips_2022_5_to_60_min %>%
-  filter(fecha %in% coldplay) %>%
+bicisColdplay <- df_bike_trips_2022_reformed %>%
+  filter(date %in% v_coldplay) %>%
   group_by(hour) %>%
-  summarise(cantidad = round(n()/length(coldplay)))
+  summarise(cantidad = round(n()/length(v_coldplay)))
 #PrimaveraSound
-bicisPrimSound <- month_day_hour_bike_trips_2022_5_to_60_min %>%
-  filter(fecha %in% primaveraSound) %>%
+bicisPrimSound <- df_bike_trips_2022_reformed %>%
+  filter(date %in% v_primaveraSound) %>%
   group_by(hour) %>%
-  summarise(cantidad = round(n()/length(primaveraSound)))
+  summarise(cantidad = round(n()/length(v_primaveraSound)))
 # Mundial
-bicisFinalMundial <- month_day_hour_bike_trips_2022_5_to_60_min %>%
-  filter(fecha %in% finalMundial) %>%
+bicisFinalMundial <- df_bike_trips_2022_reformed %>%
+  filter(date %in% v_finalMundial) %>%
   group_by(hour) %>%
-  summarise(cantidad = round(n()/length(finalMundial)))
+  summarise(cantidad = round(n()/length(v_finalMundial)))
 # Feriado Mundial
-bicisFeriadoMundial <- month_day_hour_bike_trips_2022_5_to_60_min %>%
-  filter(fecha == feriadoMundial) %>%
+bicisFeriadoMundial <- df_bike_trips_2022_reformed %>%
+  filter(date == v_feriadoMundial) %>%
   group_by(hour) %>%
-  summarise(cantidad = round(n()/length(feriadoMundial)))
+  summarise(cantidad = round(n()/length(v_feriadoMundial)))
+
+
 # Este solamente es un dato orientativo para analizar los viajes en cada evento
 viajesPromedioFeriaLibro <- sum(bicisFeriaDelLibro$cantidad) # 24 viajes
 viajesPromedioComicCon <- sum(bicisComicCon$cantidad) # 17 viajes
@@ -234,13 +272,13 @@ graficoEventos <- dfViajesPromedioEventos %>%
 
 
 
-#Dataframe clima_aeroparque_BA_2022 ----
+#Dataframe df_clima_aeroparque_BA_2022 ----
 
 #dataframe summary del clima
-summary_weather <- summary(clima_aeroparque_BA_2022_bymonth_and_raintype)
+summary(df_clima_aeroparque_BA_2022_reformed)
 
 #grafico de temperaturas por mes
-grafico_temperatura_por_mes <- clima_aeroparque_BA_2022_bymonth_and_raintype %>% 
+gr_temperatura_por_mes <- df_clima_aeroparque_BA_2022_reformed %>% 
   select(tmin, tmax, tavg, month) %>% 
   group_by(month) %>% 
   summarise(tmin_by_month = mean(tmin), tmax_by_month = mean(tmax), tavg_by_month = mean(tavg)) %>% 
@@ -250,7 +288,7 @@ grafico_temperatura_por_mes <- clima_aeroparque_BA_2022_bymonth_and_raintype %>%
   labs(x = "Mes", y = "Temperatura")
 
 #grafico de temperaturas por dia
-grafico_temperatura_por_dia <- clima_aeroparque_BA_2022_bymonth_and_raintype %>%
+gr_temperatura_por_dia <- df_clima_aeroparque_BA_2022_reformed %>%
   pivot_longer(cols = 3:4, names_to = "tipo", values_to = "temp") %>%
   ggplot(mapping = aes(x = date, y = temp, color = tipo)) +
   geom_line() +
@@ -259,7 +297,7 @@ grafico_temperatura_por_dia <- clima_aeroparque_BA_2022_bymonth_and_raintype %>%
   theme_classic()
 
 #precipitaciones por mes
-precipitaciones_por_mes <- clima_aeroparque_BA_2022_bymonth_and_raintype %>% 
+gr_precipitaciones_por_mes <- df_clima_aeroparque_BA_2022_reformed %>% 
   group_by(month) %>% 
   filter(!is.na(prcp)) %>% 
   summarise(precipitation_by_month = mean(prcp)) %>% 
@@ -268,20 +306,8 @@ precipitaciones_por_mes <- clima_aeroparque_BA_2022_bymonth_and_raintype %>%
   labs(x = "Mes",y = "Precipitacion por mes")
 
 
-#dias de lluvias
-grafico_dias_de_lluvias <- clima_aeroparque_BA_2022_bymonth_and_raintype %>% 
-  filter(!is.na(prcp)) %>% 
-  group_by(rain) %>% 
-  summarise(cant = n()) %>% 
-  ggplot(mapping = aes(x = rain, y = cant)) +
-  geom_col()
-
-
-#FULL JOIN DE DATAFRAMES
-bikes_and_weather <- full_join(month_day_hour_bike_trips_2022_5_to_60_min, clima_aeroparque_BA_2022_bymonth_and_raintype, by = "date")
-
 #uso de bicis por temperatura_promedio
-bikes_by_temp <- bikes_and_weather %>% 
+gr_bikes_by_temp <- df_bikes_and_weather %>% 
   mutate(t_avg_round = round(tavg)) %>% 
   group_by(t_avg_round) %>% 
   summarise(viajes_por_tavg = n()) %>% 
@@ -290,21 +316,27 @@ bikes_by_temp <- bikes_and_weather %>%
 
 
 #uso de bicis por precipitaciones
-uso_de_bicis_segun_precipitaciones <- bikes_and_weather %>% 
+df_uso_de_bicis_segun_precipitaciones <- df_bikes_and_weather %>% 
   filter(!is.na(prcp)) %>% 
-  group_by(rain) %>% 
-  summarise(viajes_promedios = n())
+  group_by(is_rain) %>% 
+  summarise(viajes_lluvia = n()) %>% 
+  group_by(is_rain) %>% 
+  summarise(prom_viajes = if(is_rain == FALSE){(viajes_lluvia[1])/266}else{(df_uso_de_bicis_segun_precipitaciones$viajes_lluvia[2])/97})
+  
 
-promedio_de_viajes_dias_lluviosos_vs_no <- c(uso_de_bicis_segun_precipitaciones[1,2]/266, uso_de_bicis_segun_precipitaciones[2,2]/97)
+gr_uso_de_bicis_segun_precipitaciones <- df_uso_de_bicis_segun_precipitaciones %>% 
+  ggplot(mapping = aes(x = is_rain, y = prom_viajes, color = is_rain)) + 
+  geom_col(fill = "white") +
+  labs(x = "Llovio?", y = "Cantidad", title = "Cantidad de viajes diarios durante dias de lluvia y no lluvia")
 
 
 #uso de bicis segun la potencialidad de lluvias
-grafico_de_uso_De_bicis_segun_lluvia <- clima_aeroparque_BA_2022_bymonth_and_raintype %>% 
-  filter(tipo_lluvia != "no llovio") %>% 
-  ggplot(mapping = aes(x = fct_relevel(tipo_lluvia, c("debil", "ligera", "moderada", "fuerte", "torrencial")))) +
+gr_de_uso_De_bicis_segun_lluvia <- df_clima_aeroparque_BA_2022_reformed %>% 
+  filter(rain_strength != "no llovio") %>% 
+  ggplot(mapping = aes(x = fct_relevel(rain_strength, c("debil", "ligera", "moderada", "fuerte", "torrencial")))) +
   geom_bar()
 
-bikes_and_weather %>% select(fecha, tipo_lluvia) %>% distinct() %>% group_by(tipo_lluvia) %>% summarise(cant = n())
+df_bikes_and_weather %>% select(date, rain_strength) %>% distinct() %>% group_by(rain_strength) %>% summarise(cant = n())
 
 
-bikes_and_weather %>% group_by(tipo_lluvia) %>% summarise(cant = n())
+df_bikes_and_weather %>% group_by(rain_strength) %>% summarise(cant = n())

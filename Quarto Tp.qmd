@@ -36,60 +36,125 @@ source(file = "Hoja Auxiliar.R", local = TRUE)
 
 ------------------------------------------------------------------------
 
-## ANÁLISIS DESCRIPTIVO DE DATAFRAME VIAJES DE ECO-BICIS 2022
-
-```{r}
-head(bike_trips_2022_5_to_60_min)
-```
-
-Análisis general del nuevo dataframe de viajes en eco-bicis 2022.
-
-```{r}
-summary_bike_trips_2022_5_to_60_min
-str(month_day_hour_bike_trips_2022_5_to_60_min)
-```
+## INFORMACION SOBRE DATAFRAME VIAJES DE ECO-BICIS 2022
 
 ### Variables del Dataframe
-
 ::: {style="color: white;"}
 
 "Id_recorrido" \--\> Identificador unico de cada recorrido
-
 "duracion_recorrido" \--\> Duracion (en segundos) de cada recorrido
-
 "fecha_origen_recorrido" \--\> Dia y horario del momento en que se inicio el recorrido
-
 "id_estacion_origen" \--\> Identificador unico de la estacion donde se inicio el recorrido
-
 "nombre_estacion_origen" \--\> Nombre de la estacion donde se inicio el recorrido
-
 "direccion_estacion_origen" \--\> Direccion de la ubicacion de la estacion donde se inicio el recorrido
-
 "long_estacion_origen" \--\> Coordenadas longitudinales de la estacion donde se inicio el recorrido
-
 "lat_estacion_origen" \--\> Coordenadas latitudinales de la estacion donde se inicio el recorrido
-
 "fecha_destino_recorrido" \--\> Dia y horario del momento en que se finalizo el recorrido
-
 "id_estacion_destino" \--\> Identificador unico de la estacion donde se finalizo el recorrido
-
 "nombre_estacion_destino" \--\> Nombre de la estacion donde se finalizo el recorrido
-
 "direccion_estacion_destino" \--\> Direccion de la ubicacion de la estacion donde se finalizo el recorrido
-
 "long_estacion_destino" \--\> Coordenadas longitudinales de la estacion donde se finalizo el recorrido
-
 "lat_estacion_destino" \--\> Coordenadas latitudinales de la estacion donde se finalizo el recorrido
-
 "id_usuario" \--\> Identidicador unico del usuario
-
 "modelo_bicicleta" \--\> Modelo de la bicicleta (FIT/ICONIC)
-
 "Género" \--\> Genero del usuario(Masculino - Femenino - Otro - NA)
-
-"fecha" \--\> Fecha del momento en que se inicio el recorrido
+"Date" \--\> Fecha del momento en que se inicio el recorrido (en el dataframe original esta variable tenia el nombre fecha, pero lo modificamos para cuando luego hagamos el join entre dataframes tengamos las keys de las columnas con los mismo nombres)
+"Month" \--\> Mes de fecha de origen de recorrido
+"Hour" \--\> Horario de fecha de origen de recorrido
+"Week_day" \--\> Dia de la semana del origen de recorrido
+"Public_holiday" \--\> El dia del recorrido era feriado?
 :::
 
+
+Comenzamos mostrando una visualización del dataframe, con el que vamos a trabajar, analizar y elaborar hipotesis.
+
+```{r}
+head(month_day_hour_bike_trips_2022_5_to_60_min)
+```
+
+
+Análisis general del nuevo dataframe de viajes en eco-bicis 2022. Para este análisis general usamos las funciones summary() y str() que nos brindaron información general sobre el dataframe que vamos a analizar, como sus tipos de datos, valores minimos, maximos, medias, entre otros valores redundantes.
+
+```{r}
+summary(df_bike_trips_2022_reformed)
+```
+```{r}
+str(df_bike_trips_2022_reformed)
+```
+
+
+
+## ANÁLISIS DESCRIPTIVO DE VIAJES DE ECO-BICIS 2022
+
+#### Duración de los recorridos
+
+```{r}
+gr_trips_duration_in_minutes_box
+gr_trips_duration_in_minutes_by_gender
+gr_trips_duration_in_minutes_col
+```
+
+```{r}
+df_promedio_y_mediana_de_viajes
+```
+
+#### Fecha de recorridos
+
+```{r}
+gr_trips_by_month 
+gr_trips_by_day
+gr_trips_by_hour
+gr_trips_by_month_and_hour
+gr_trips_by_day_and_hour
+```
+
+#### Feriados vs no feriados
+
+```{r}
+gr_viajes_promedio_feriados
+```
+
+#### Estación de Origen
+
+```{r}
+df_origin_trip
+```
+
+#### Estación de Destino
+
+```{r}
+df_destination_trip
+```
+
+#### Viajes Mas comunes
+
+```{r}
+df_common_trips
+```
+
+
+#### Modelo de Bicicleta
+
+```{r}
+gr_bike_type 
+```
+
+#### Genero
+
+```{r}
+gr_use_of_bikes_by_gender 
+gr_use_of_bikes_by_gender_per_hour
+```
+
+#### Uso en días destacados del año
+```{r}
+graficoEventos
+```
+
+
+------------------------------------------------------------------------
+
+## ANÁLISIS DESCRIPTIVO DE DATAFRAME VIAJES DE CLIMA AEROPARQUE 2022
 
 ### Variables del Dataframe (clima_aeroparque_BA_2022)
   
@@ -104,103 +169,46 @@ str(month_day_hour_bike_trips_2022_5_to_60_min)
 "wspd" \--\> Velocidad del viento promedio (km/h)
 "wpgt" \--\> Dias en que la velocidad promedio supero los 30km/h
 "pres" \--\> Presion del aire promedio (hpa)
-"tsun" \--\> BORRAR COLUMNA!!
+"tsun" \--\> Duracion del sol (NA)
+"month" \--\> Mes de la fecha de la observacion
+"is_rain" \--\> Hubo precipitaciones en la observacion?
+"rain_stregth" \--\> Potencia de la lluvia
 :::
 
 
-### Visualización de Datos
-
-#### Duración de los recorridos
 
 ```{r}
-trips_duration_in_minutes
-```
+summary(df_clima_aeroparque_BA_2022_reformed)
 
-```{r}
-promedio_y_mediana_de_viajes
-```
-
-#### Fecha de recorridos
-
-```{r}
-trips_by_month 
-trips_by_day
-trips_by_hour
-trips_by_month_and_hour
-trips_by_day_and_hour
-```
-
-#### Feriados vs no feriados
-
-```{r}
-viajes_promedio_feriados
-```
-
-#### Estación de Origen
-
-```{r}
-origin_trip
-```
-
-#### Estación de Destino
-
-```{r}
-destination_trip
-```
-
-#### Viajes Mas comunes
-
-```{r}
-common_trips
-```
-
-
-#### Modelo de Bicicleta
-
-```{r}
-bike_type 
-```
-
-#### Genero
-
-```{r}
-use_of_bikes_by_gender 
-use_of_bikes_by_gender_per_hour
-```
-
-#### Uso en días destacados del año
-```{r}
-graficoEventos
-```
-
-
-------------------------------------------------------------------------
-
-## ANÁLISIS DESCRIPTIVO DE DATAFRAME VIAJES DE CLIMA AEROPARQUE 2022
-
-```{r}
-summary_weather
-
-str(clima_aeroparque_BA_2022_bymonth_and_raintype)
+str(df_clima_aeroparque_BA_2022_reformed)
 ```
 
 #### Clima durante el year
 
 ```{r}
-grafico_temperatura_por_dia
-grafico_temperatura_por_mes 
+gr_temperatura_por_dia
+gr_temperatura_por_mes 
 ```
 
 #### Precipitaciones durante el year
 
 ```{r}
-precipitaciones_por_mes
-grafico_dias_de_lluvias
+gr_precipitaciones_por_mes
 ```
 
 ### Uso de bicis by weather
 Notamos que este grafico en particular tiene un problema, las temperaturas promedias durante los 365 no se distribuyen de forma equitativa,por ejemplo es mucho mas comun tener un dia con promedio de 20 grados que un dia con promedio de 8 grados, entonces sumar el uso de bicis dependiendo de la temperatura promedio estaria sesgado.
 ```{r}
-bikes_by_temp
+gr_bikes_by_temp
+```
+
+
+```{r}
+gr_uso_de_bicis_segun_precipitaciones
+```
+
+
+```{r}
+gr_de_uso_De_bicis_segun_lluvia
 ```
 
