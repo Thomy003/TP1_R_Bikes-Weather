@@ -8,6 +8,8 @@ format: html
 editor: visual
 ---
 
+En este proyecto, nos propusimos analizar el uso de las Ecobici en el año 2022, y la manera en que fluctua su uso dependiendo de distintas caracteristicas como clima, temperatura, horas del dia, dia de la semana, genero de los usuarios, tipo de bici, eventos sociales, entre otros. El año pasado, se registraron un total de 3.000.000 de recorridos. De esta cantidad, se extrajo una muestra de 10.000 recorridos. Nuestro analisis va a ser basado en esta muestra.
+
 ------------------------------------------------------------------------
 
 ## INFORMACIÓN SOBRE LAS LIBRERÍAS
@@ -20,7 +22,7 @@ tidyverse es un paquete que incluye librerías como ggplot2 (visualización de d
 
 ## INFORMACIÓN SOBRE LOS DATA FRAMES
 
-Durante esta investigación vamos a trabajar con dos dataframes relacionados al uso de Eco-bicis en CABA y el clima registrada en aeroparque, ambos registros son del anio 2022.
+Durante esta investigación vamos a trabajar con dos dataframes relacionados al uso de Eco-bicis en CABA y el clima registrada en aeroparque, ambos registros son del ao 2022.
 
 Para este análisis solamente observaremos el comportamiento de aquellos registros cuya duración del viaje este entre 5 minutos a 1 hora, para evitar valores atípicos.
 
@@ -87,7 +89,7 @@ str(df_bike_trips_2022_reformed)
 ## ANÁLISIS DESCRIPTIVO DE VIAJES DE ECO-BICIS 2022
 
 #### Duración de los recorridos
-
+Con este grafico queremos mostrar  la cantidad de recorridos que hubieron para cada duracion (en minutos) posible
 ```{r}
 gr_trips_duration_in_minutes_box
 gr_trips_duration_in_minutes_by_gender
@@ -99,6 +101,7 @@ df_promedio_y_mediana_de_viajes
 ```
 
 #### Fecha de recorridos
+En los siguentes graficos, buscamos mostrar la cantidad de recorridos realizados durante distintos lapsos de tiempos tales como meses, dias y horarios
 
 ```{r}
 gr_trips_by_month 
@@ -134,13 +137,14 @@ df_common_trips
 
 
 #### Modelo de Bicicleta
+A continuacion, se encuentra el grafico que diferencia la cantidad de recorridos que se realizaron con la bici ICONIC y la FIT
 
 ```{r}
 gr_bike_type 
 ```
 
 #### Genero
-
+Este grafico, muestra la cantidad de recorridos que fueron realizados por hombres , mujeres y otros
 ```{r}
 gr_use_of_bikes_by_gender 
 gr_use_of_bikes_by_gender_per_hour
@@ -184,13 +188,14 @@ str(df_clima_aeroparque_BA_2022_reformed)
 ```
 
 #### Clima durante el year
-
+El siguiente grafico muestra la temperatura maxima y minima de cada dia del 2022
 ```{r}
 gr_temperatura_por_dia
 gr_temperatura_por_mes 
 ```
 
 #### Precipitaciones durante el year
+se encuentra el grafico demostrativo de las precipitaciones (en mm) de cada mes
 
 ```{r}
 gr_precipitaciones_por_mes
