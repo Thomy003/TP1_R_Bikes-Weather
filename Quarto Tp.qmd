@@ -214,6 +214,10 @@ gr_uso_de_bicis_segun_precipitaciones
 
 
 ```{r}
-gr_de_uso_De_bicis_segun_lluvia
+gr_potencia_lluvia_2022
+```
+
+```{r}
+gr_duracion_recorrido_segun_lluvia
 ```
 
