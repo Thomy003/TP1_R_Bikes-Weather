@@ -20,12 +20,59 @@ v_feriaLibro <- c("2022-04-28","2022-04-29","2022-04-30","2022-05-01","2022-05-0
 v_comicCon <- c("2022-05-20","2022-05-21","2022-05-22") #cp = 80 mil
 v_duaLipa <- c("2022-09-13","2022-09-14") #cp = 50 mil
 v_marchaLGBTQI <- c("2022-10-05") #cp = 130 mil
-v_coldplay <- c("2022-10-25","2022-10-26","2022-10-28","2022-10-29","2022-11-01","2022-11-01","2022-11-02","2022-11-04","2022-11-05","2022-11-07","2022-11-08") #cp = 600 mil
+v_coldplay <- c("2022-10-25","2022-10-26","2022-10-28","2022-10-29","2022-11-01","2022-11-02","2022-11-04","2022-11-05","2022-11-07","2022-11-08") #cp = 600 mil
 v_primaveraSound <- c("2022-11-12","2022-11-13") #cp = 100 mil
 v_finalMundial <- c("2022-12-18") #cp = 4 millones
 v_feriadoMundial <- c("2022-12-20") #cp = ??
 
 v_diasDestacados <- c(v_feriaLibro, v_comicCon, v_duaLipa, v_marchaLGBTQI, v_coldplay, v_primaveraSound, v_finalMundial, v_feriadoMundial)
+
+
+# Feria del libro
+v_bicisFeriaDelLibro <- as.numeric(df_bike_trips_2022_reformed %>%
+                                     filter(date %in% v_feriaLibro) %>%
+                                     summarise(cantidad = n()/length(v_feriaLibro)))
+# Comic Con
+v_bicisComicCon <- as.numeric(df_bike_trips_2022_reformed %>%
+                                filter(date %in% v_comicCon) %>%
+                                summarise(cantidad = round(n()/length(v_comicCon))))
+# Dua Lipa
+v_bicisDuaLipa <- as.numeric(df_bike_trips_2022_reformed %>%
+                               filter(date %in% v_duaLipa) %>%
+                               summarise(cantidad = round(n()/length(v_duaLipa))))
+# MarchaLGBT
+v_bicisMarchaLGBT <- as.numeric(df_bike_trips_2022_reformed %>%
+                                  filter(date %in% v_marchaLGBTQI) %>%
+                                  summarise(cantidad = round(n()/length(v_marchaLGBTQI))))
+# Coldplay
+v_bicisColdplay <- as.numeric(df_bike_trips_2022_reformed %>%
+                                filter(date %in% v_coldplay) %>%
+                                summarise(cantidad = round(n()/length(v_coldplay))))
+#PrimaveraSound
+v_bicisPrimSound <- as.numeric(df_bike_trips_2022_reformed %>%
+                                 filter(date %in% v_primaveraSound) %>%
+                                 summarise(cantidad = round(n()/length(v_primaveraSound))))
+# Mundial
+v_bicisFinalMundial <- as.numeric(df_bike_trips_2022_reformed %>%
+                                    filter(date %in% v_finalMundial) %>%
+                                    summarise(cantidad = round(n()/length(v_finalMundial))))
+# Feriado Mundial
+v_bicisFeriadoMundial <- as.numeric(df_bike_trips_2022_reformed %>%
+                                      filter(date == v_feriadoMundial) %>%
+                                      summarise(cantidad = round(n()/length(v_feriadoMundial))))
+
+v_dia_promedio <- as.numeric(df_bike_trips_2022_reformed %>% 
+                               filter(week_day %in% c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday")) %>% 
+                               group_by(date) %>% 
+                               summarise(cantidad = n()) %>% 
+                               summarise(cant_prom = sum(cantidad) / length(date)))
+
+v_dia_finde_promedio <- as.numeric(df_bike_trips_2022_reformed %>% 
+                                     filter(week_day %in% c("Saturday", "Sunday")) %>% 
+                                     group_by(date) %>% 
+                                     summarise(cantidad = n()) %>% 
+                                     summarise(cant_prom = sum(cantidad) / length(date)))
+
 #DATAFRAMES
 #Dataframes_originales ----
 
@@ -87,16 +134,16 @@ gr_trips_duration_in_minutes_col <- df_bike_trips_2022_reformed %>%
 gr_trips_duration_in_minutes_box <- df_bike_trips_2022_reformed %>% 
   mutate(duracion_recorrido = duracion_recorrido/60) %>% 
   ggplot(mapping = aes(y = duracion_recorrido)) +
-  geom_boxplot(color = "#E6AC6E") +
-  labs(y = "Duracion", title = "Duracion de los recorridos en minutos") +
-  scale_x_discrete(expand = c(0,0))
+  geom_boxplot(color = "#E6AC6E", shape = 11) +
+  labs(x = "recorridos", y = "Duracion", title = "Duracion de los recorridos en minutos") +
+  scale_x_discrete(expand = c(0,0)) 
 
 gr_trips_duration_in_minutes_by_gender <- df_bike_trips_2022_reformed %>% 
   filter(!is.na(Género)) %>% 
   mutate(duracion_recorrido = duracion_recorrido/60) %>% 
   ggplot(mapping = aes(y = duracion_recorrido, x = Género, color = Género)) +
   geom_boxplot() +
-  labs(y = "Duracion", title = "Duracion de los recorridos en minutos")
+  labs(y = "Duracion", title = "Duracion de los recorridos en minutos segun genero")
 
 #visualizacion de viajes por mes
 gr_trips_by_month <- df_bike_trips_2022_reformed %>% 
@@ -160,6 +207,12 @@ gr_bike_type <- df_bike_trips_2022_reformed %>%
   geom_bar() +
   labs(x = "Modelo de bicicleta", y = "Cantidad de recorridos")
 
+gr_bike_type_boxplot <- df_bike_trips_2022_reformed %>% 
+  ggplot(mapping = aes(x = modelo_bicicleta, y = duracion_recorrido, fill = modelo_bicicleta)) +
+  geom_boxplot() +
+  labs(x = "Modelo de bicicleta", y = "Duracion de los recorridos en segundos")
+
+
 #uso de bicis por genero
 gr_use_of_bikes_by_gender <- df_bike_trips_2022_reformed %>% 
   select(Género) %>% 
@@ -209,52 +262,20 @@ gr_viajes_promedio_feriados <- df_uso_feriado_vs_no_feriado_prom %>%
 
 
 #uso de bicis en días desetacados del año (arbitrario) ----
-#para este caso seleccionamos arbitrariamente 8 días que están descritos en el informe.
+df_Viajes_Promedio_Eventos_No_Finde <- data.frame(evento = c("Feria del Libro","Dua Lipa","Marcha LGBT","Coldplay","Feriado mundial", "Dia Prom"),
+                                                  viajesPorEvento = c(v_bicisFeriaDelLibro, v_bicisDuaLipa, v_bicisMarchaLGBT, v_bicisColdplay,v_bicisFeriadoMundial, v_dia_promedio))
 
-# Feria del libro
-v_bicisFeriaDelLibro <- as.numeric(df_bike_trips_2022_reformed %>%
-  filter(date %in% v_feriaLibro) %>%
-  summarise(cantidad = n()/length(v_feriaLibro)))
-# Comic Con
-v_bicisComicCon <- as.numeric(df_bike_trips_2022_reformed %>%
-  filter(date %in% v_comicCon) %>%
-  summarise(cantidad = round(n()/length(v_comicCon))))
-# Dua Lipa
-v_bicisDuaLipa <- as.numeric(df_bike_trips_2022_reformed %>%
-  filter(date %in% v_duaLipa) %>%
-  summarise(cantidad = round(n()/length(v_duaLipa))))
-# MarchaLGBT
-v_bicisMarchaLGBT <- as.numeric(df_bike_trips_2022_reformed %>%
-  filter(date %in% v_marchaLGBTQI) %>%
-  summarise(cantidad = round(n()/length(v_marchaLGBTQI))))
-# Coldplay
-v_bicisColdplay <- as.numeric(df_bike_trips_2022_reformed %>%
-  filter(date %in% v_coldplay) %>%
-  summarise(cantidad = round(n()/length(v_coldplay))))
-#PrimaveraSound
-v_bicisPrimSound <- as.numeric(df_bike_trips_2022_reformed %>%
-  filter(date %in% v_primaveraSound) %>%
-  summarise(cantidad = round(n()/length(v_primaveraSound))))
-# Mundial
-v_bicisFinalMundial <- as.numeric(df_bike_trips_2022_reformed %>%
-  filter(date %in% v_finalMundial) %>%
-  summarise(cantidad = round(n()/length(v_finalMundial))))
-# Feriado Mundial
-v_bicisFeriadoMundial <- as.numeric(df_bike_trips_2022_reformed %>%
-  filter(date == v_feriadoMundial) %>%
-  summarise(cantidad = round(n()/length(v_feriadoMundial))))
-
-# De mayor a menor, los eventos con mayor viajes promedio son: Marcha LGBT, concierto Dua Lipa, concierto Coldplay y Final del Mundial, Feria del libro, Comic Con y Primavera Sound
-# Generamos un data frame con los viajes realizados según cada evento
-dfViajesPromedioEventos <- data.frame(
-  evento = c("Feria del Libro","Comic Con","Dua Lipa","Marcha LGBT","Coldplay","Primavera Sound","Mundial","Feriado mundial"),
-  viajesPorEvento = c(v_bicisFeriaDelLibro, v_bicisComicCon, v_bicisDuaLipa, v_bicisMarchaLGBT, v_bicisColdplay, v_bicisPrimSound,v_bicisFinalMundial,v_bicisFeriadoMundial))
-
-graficoEventos <- dfViajesPromedioEventos %>%
+gr_Eventos_Dia_De_Semana <- df_Viajes_Promedio_Eventos_No_Finde %>%
   ggplot(mapping = aes(x = evento, y = viajesPorEvento)) +
   geom_col()
 
 
+df_Viajes_Promedio_Eventos_Finde <- data.frame(evento = c("Comic Con", "Primavera Sound", "Mundial", "Dia Promedio"),
+                                                  viajesPorEvento = c(v_bicisComicCon, v_bicisPrimSound, v_bicisFinalMundial, v_dia_finde_promedio))
+
+gr_Eventos_Fin_De_Semana <- df_Viajes_Promedio_Eventos_Finde %>%
+  ggplot(mapping = aes(x = evento, y = viajesPorEvento)) +
+  geom_col()
 
 #Dataframe df_clima_aeroparque_BA_2022 ----
 
