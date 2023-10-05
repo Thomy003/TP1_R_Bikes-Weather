@@ -25,6 +25,8 @@ df_bike_trips_2022 <- read_csv("Data/trips_2022_reducido.csv")
 
 v_months <- c("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December")
 
+v_all_days <- c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday")
+
 #Las fechas de los días feriados de Argentina 2022 los obtuvimos de la siguiente pagina: https://www.argentina.gob.ar/interior/feriados-nacionales-2022
 v_feriados <- c("2022-01-01", "2022-02-28", "2022-03-01", "2022-03-24", "2022-04-02", "2022-04-14", "2022-04-15", "2022-04-16", "2022-04-17", "2022-04-22", "2022-04-23", "2022-04-24", "2022-05-01", "2022-05-02", "2022-05-18", "2022-05-25", "2022-06-17", "2022-06-20", "2022-07-09", "2022-07-30", "2022-08-15", "2022-09-26", "2022-09-27", "2022-10-05", "2022-10-07", "2022-10-10", "2022-11-20", "2022-11-21", "2022-12-08", "2022-12-09", "2022-12-25")
 
@@ -42,8 +44,10 @@ v_feriado_del_Mundial <- c("2022-12-20")
 
 
 v_eventos_ord <- c("Marcha LGBT", "Dua Lipa", "Coldplay", "Feriado del mundial", "Feria del Libro", "Dia Promedio")
+
 v_eventos_finde_ord <- c("Comic Con", "Mundial", "Primavera Sound", "Coldplay", "Feria del Libro", "Dia Promedio")
 
+v_rain_strength <- c("debil", "ligera", "moderada", "fuerte", "torrencial")
 
 #Dataframes_bicis_modificado ----
 #Dataframe de bicis filtrado por duración del recorrido, con 4 variables mas ("month", "week_day", "hour" y "public_holiday") y la variable fecha renombrada a date.
@@ -172,12 +176,22 @@ v_dia_finde_promedio <- as.numeric(df_bike_trips_2022_reformed %>%
                                      summarise(cant_prom = sum(cantidad) / length(date)))
 
 #viajes diarios durante los eventos que ocurrieron durante dias de la semana mayoritariamente
-df_Viajes_Promedio_Eventos_No_Finde <- data.frame(evento = c("Feria del Libro","Dua Lipa","Marcha LGBT","Coldplay","Feriado del mundial", "Dia Promedio"),
-                                                  viajesPorEvento = c(v_bicisFeriaDelLibro, v_bicisDuaLipa, v_bicisMarchaLGBT, v_bicisColdplay,v_bicisFeriadoDelMundial, v_dia_promedio))
+df_Viajes_Promedio_Eventos_No_Finde <- data.frame(evento = v_eventos_ord,
+                                                  viajesPorEvento = c(v_bicisFeriaDelLibro, 
+                                                                      v_bicisDuaLipa, 
+                                                                      v_bicisMarchaLGBT, 
+                                                                      v_bicisColdplay,
+                                                                      v_bicisFeriadoDelMundial, 
+                                                                      v_dia_promedio))
 
 #viajes diarios durante los eventos que ocurrieron durante dias de fin de semana mayoritariamente
-df_Viajes_Promedio_Eventos_Finde <- data.frame(evento = c("Comic Con", "Primavera Sound", "Mundial", "Coldplay", "Feria del Libro", "Dia Promedio"),
-                                               viajesPorEvento = c(v_bicisComicCon, v_bicisPrimSound, v_bicisFinalMundial, v_bicisColdplay_finde, v_bicisFeriaDelLibro_finde, v_dia_finde_promedio))
+df_Viajes_Promedio_Eventos_Finde <- data.frame(evento = v_eventos_finde_ord,
+                                               viajesPorEvento = c(v_bicisComicCon, 
+                                                                   v_bicisPrimSound, 
+                                                                   v_bicisFinalMundial, 
+                                                                   v_bicisColdplay_finde, 
+                                                                   v_bicisFeriaDelLibro_finde, 
+                                                                   v_dia_finde_promedio))
 
 
 #cantidad de viajes durante dias de lluvia y no lluvia
@@ -212,13 +226,13 @@ gr_trips_duration_in_minutes_col <- df_bike_trips_2022_reformed %>%
 
 #visualizacion de viajes por mes
 gr_trips_by_month <- df_bike_trips_2022_reformed %>% 
-  ggplot(mapping = aes(x = fct_relevel(month, c("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December")))) +
+  ggplot(mapping = aes(x = fct_relevel(month, v_months))) +
   geom_bar(fill = "mintcream", colour = "lightskyblue") +
   labs(x = "Mes", y = "Cantidad", title = "Cantidad de recorridos durante cada mes del año")
 
 #visualizacion de viajes por dia
 gr_trips_by_day <- df_bike_trips_2022_reformed %>% 
-  ggplot(mapping = aes(x = fct_relevel(week_day, c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"))))+
+  ggplot(mapping = aes(x = fct_relevel(week_day, v_all_days)))+
   geom_bar(fill = "mintcream", colour = "lightskyblue") +
   labs(x = "Dia de la semana", y = "Cantidad", title = "Cantidad de recorridos durante cada dia de la semana")
 
@@ -251,7 +265,7 @@ gr_trips_by_day_and_hour <- df_bike_trips_2022_reformed %>%
   group_by(week_day) %>% 
   ggplot(mapping = aes(x = hour)) +
   geom_bar(fill = "#CBA872",color = "#A05806") +
-  facet_wrap(~fct_relevel(week_day, c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday")), nrow = 2) +
+  facet_wrap(~fct_relevel(week_day, v_all_days), nrow = 2) +
   labs(x = "Horario", y = "Cantidad", title = "Cantidad de recorricos por dia segun horario")
 
 
@@ -374,7 +388,7 @@ gr_precipitaciones_por_mes <- df_clima_aeroparque_BA_2022_reformed %>%
   group_by(month) %>% 
   filter(!is.na(prcp)) %>% 
   summarise(precipitation_by_month = mean(prcp)) %>% 
-  ggplot(mapping = aes(x = fct_relevel(month, c("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December")), y = precipitation_by_month)) +
+  ggplot(mapping = aes(x = fct_relevel(month, v_months), y = precipitation_by_month)) +
   geom_col(fill = "#386fa4", colour = "#133c55") +
   labs(x = "Mes",y = "Precipitacion (mm)", title = "Precipitaciones por mes")
 
@@ -400,7 +414,7 @@ gr_uso_de_bicis_segun_precipitaciones <- df_uso_de_bicis_segun_precipitaciones_p
 #cantidad de dias de lluvia
 gr_potencia_lluvia_2022 <- df_bikes_and_weather %>% 
   filter(rain_strength != "no llovio") %>% 
-  ggplot(mapping = aes(x = fct_relevel(rain_strength, c("debil", "ligera", "moderada", "fuerte", "torrencial")), fill = rain_strength)) +
+  ggplot(mapping = aes(x = fct_relevel(rain_strength, v_rain_strength), fill = rain_strength)) +
   geom_bar() + 
   labs(x = "", y = "cantidad de viajes", fill = "Tipo de lluvia")
 
@@ -408,6 +422,6 @@ gr_duracion_recorrido_segun_lluvia <- df_bikes_and_weather %>%
   filter(!is.na(prcp)) %>% 
   filter(!is.na(duracion_recorrido)) %>% 
   group_by(rain_strength) %>% 
-  ggplot(mappin = aes(x = fct_relevel(rain_strength, c("debil", "ligera", "moderada", "fuerte", "torrencial")), y = duracion_recorrido, color = rain_strength)) +
+  ggplot(mappin = aes(x = fct_relevel(rain_strength, v_rain_strength), y = duracion_recorrido, color = rain_strength)) +
   geom_boxplot() +
   labs(x = "", y = "Duracion", title = "Duracion de los recorridos segun lluvia", color = "Tipo de lluvia")
