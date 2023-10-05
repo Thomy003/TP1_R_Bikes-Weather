@@ -28,7 +28,7 @@ Por otro lado `readr` es una librería centrada en la lectura de datos de difere
 
 ## SCRIPTS / ARCHIVOS DEL PROYECTO
 
-El informe realizado está organizado mediante un archivo de formato `Rproj`, el cual contiene metadatos sobre el proyecto (nombre, directorio -carpeta que contiene el proyecto-, librerías utilizadas, entre otros). La carpeta que contiene el proyecto: `TP1_R_Bikes-Weather`, contiene 3 archivos esenciales para la manipulación de datos, su análisis y el desarrollo de un informe: - `Quarto TP.qmd`: Es un archivo de tipo Quarto en el cual se encuentra el informe realizado sobre el análisis exploratorio y descriptivo de los conjuntos de datos de interés. - `Script_TP1.R`: Es un archivo de formato R que contiene el código esencial para la generación de recursos esenciales para el desarrollo del informe. Entre estos recursos se encuentran: variables de interés previamente establecidas, la importación del conjunto de datos contenidos en los archivos `.csv`, las librerías utilizadas y el tratamiento realizado sobre los dataframes para la generación de diversos recursos.
+El informe realizado está organizado mediante un archivo de formato `Rproj`, el cual contiene metadatos sobre el proyecto (nombre, directorio -carpeta que contiene el proyecto-, librerías utilizadas, entre otros). La carpeta que contiene el proyecto: `TP1_R_Bikes-Weather`, contiene 2 archivos esenciales para la manipulación de datos, su análisis y el desarrollo de un informe: - `Quarto TP.qmd`: Es un archivo de tipo Quarto en el cual se encuentra el informe realizado sobre el análisis exploratorio y descriptivo de los conjuntos de datos de interés. - `Script_TP1.R`: Es un archivo de formato R que contiene el código esencial para la generación de recursos esenciales para el desarrollo del informe. Entre estos recursos se encuentran: variables de interés previamente establecidas, la importación del conjunto de datos contenidos en los archivos `.csv`, las librerías utilizadas y el tratamiento realizado sobre los dataframes para la generación de diversos recursos.
 
 Mediante la función `source` de R base, podemos ejecutar los archivos locales esenciales para la visualización de los datos mediante gráficos, tablas y dataframes.
 
@@ -46,7 +46,47 @@ Durante esta investigación vamos a trabajar con dos dataframes. El primer dataf
 
 -   Dataset *uso de EcoBicis en CABA*: Para el análisis de este dataset utilizaremos una muestra de diez mil viajes de los casi tres millones registrados. De dicha muestra, seleccionaremos solamente aquellos viajes de entre cinco y sesenta minutos (una hora) para evitar datos atípicos. La muestra reducida utilizada fue proporcionada por la cátedra, la cual puede ser descargada [acá](https://ldd2023.netlify.app/tps/data/trips_2022_reducido.csv). La totalidad de datos de uso del sistema Ecobici de la CABA puede descargarse [acá](https://data.buenosaires.gob.ar/dataset/bicicletas-publicas/resource/4bb181ac-3259-4f05-a555-bec1d2c7fa1f).
 
-Variables del Dataframe ::: {style="color: white;"} "Id_recorrido" \--\> Identificador unico de cada recorrido "duracion_recorrido" \--\> Duracion (en segundos) de cada recorrido "fecha_origen_recorrido" \--\> Dia y horario del momento en que se inicio el recorrido "id_estacion_origen" \--\> Identificador unico de la estacion donde se inicio el recorrido "nombre_estacion_origen" \--\> Nombre de la estacion donde se inicio el recorrido "direccion_estacion_origen" \--\> Direccion de la ubicacion de la estacion donde se inicio el recorrido "long_estacion_origen" \--\> Coordenadas longitudinales de la estacion donde se inicio el recorrido "lat_estacion_origen" \--\> Coordenadas latitudinales de la estacion donde se inicio el recorrido "fecha_destino_recorrido" \--\> Dia y horario del momento en que se finalizo el recorrido "id_estacion_destino" \--\> Identificador unico de la estacion donde se finalizo el recorrido "nombre_estacion_destino" \--\> Nombre de la estacion donde se finalizo el recorrido "direccion_estacion_destino" \--\> Direccion de la ubicacion de la estacion donde se finalizo el recorrido "long_estacion_destino" \--\> Coordenadas longitudinales de la estacion donde se finalizo el recorrido "lat_estacion_destino" \--\> Coordenadas latitudinales de la estacion donde se finalizo el recorrido "id_usuario" \--\> Identidicador unico del usuario "modelo_bicicleta" \--\> Modelo de la bicicleta (FIT/ICONIC) "Género" \--\> Genero del usuario(Masculino - Femenino - Otro - NA) "Date" \--\> Fecha del momento en que se inicio el recorrido (en el dataframe original esta variable tenia el nombre fecha, pero lo modificamos para cuando luego hagamos el join entre dataframes tengamos las keys de las columnas con los mismo nombres) "Month" \--\> Mes de fecha de origen de recorrido "Hour" \--\> Horario de fecha de origen de recorrido "Week_day" \--\> Dia de la semana del origen de recorrido "Public_holiday" \--\> El dia del recorrido era feriado? :::
+Variables del Dataframe
+
+-   "Id_recorrido" \--\> Identificador unico de cada recorrido
+
+-   "duracion_recorrido" \--\> Duracion (en segundos) de cada recorrido
+
+-   "fecha_origen_recorrido" \--\> Dia y horario del momento en que se inicio el recorrido
+
+-   "id_estacion_origen" \--\> Identificador unico de la estacion donde se inicio el recorrido
+
+-   "nombre_estacion_origen" \--\> Nombre de la estacion donde se inicio el recorrido
+
+-   "direccion_estacion_origen" \--\> Direccion de la ubicacion de la estacion donde se inicio el recorrido
+
+-   "long_estacion_origen" \--\> Coordenadas longitudinales de la estacion donde se inicio el recorrido
+
+-   "lat_estacion_origen" \--\> Coordenadas latitudinales de la estacion donde se inicio el recorrido
+
+-   "fecha_destino_recorrido" \--\> Dia y horario del momento en que se finalizo el recorrido
+
+-   "id_estacion_destino" \--\> Identificador unico de la estacion donde se finalizo el recorrido
+
+-   "nombre_estacion_destino" \--\> Nombre de la estacion donde se finalizo el recorrido
+
+-   "direccion_estacion_destino" \--\> Direccion de la ubicacion de la estacion donde se finalizo el recorrido
+
+-   "long_estacion_destino" \--\> Coordenadas longitudinales de la estacion donde se finalizo el recorrido
+
+-   "lat_estacion_destino" \--\> Coordenadas latitudinales de la estacion donde se finalizo el recorrido
+
+-   "id_usuario" \--\> Identidicador unico del usuario "modelo_bicicleta" \--\> Modelo de la bicicleta (FIT/ICONIC)
+
+-   "Género" \--\> Genero del usuario(Masculino - Femenino - Otro - NA)
+
+-   "Date" \--\> Fecha del momento en que se inicio el recorrido (en el dataframe original esta variable tenia el nombre fecha, pero lo modificamos para cuando luego hagamos el join entre dataframes tengamos las keys de las columnas con los mismo nombres)
+
+-   "Month" \--\> Mes de fecha de origen de recorrido "Hour" \--\> Horario de fecha de origen de recorrido
+
+-   "Week_day" \--\> Dia de la semana del origen de recorrido
+
+-   "Public_holiday" \--\> El dia del recorrido era feriado?
 
 Como ejemplo antes de comenzar con el análisis descriptivo, vamos a proceder a mostrarles una visualización del dataframe, con el que vamos a trabajar, analizar y elaborar hipótesis. Este dataframes incluye otras variables extras a diferencia del dataframe original, lo cual nos permitió generar mas preguntas que podríamos hacer durante el análisis del proyecto.
 
@@ -68,7 +108,35 @@ str(df_bike_trips_2022_reformed)
 
 -   Dataset *MeteoStat-Aeroparque*: Esta base de datos corresponde a observaciones climáticas recolectadas por la estación meteorológica de Aeroparque desde el primero de enero de 2022 hasta el 31 de diciembre de 2022. Como los dataframes utilizados se encuentran en formato `.csv`, utilizamos la librería `readr`.
 
-Variables del Dataframe ::: {style="color: white;"} "date" \--\> Fecha de la medicion (AAAA-MM-DD) "tavg" \--\> Temperatura promedio (ºC) "tmax" \--\> Temperatura maxima (ºC) "tmin" \--\> Temperatura minima (ºC) "prcp" \--\> Precipitacion total (mm) "snow" \--\> Profundidad de la nieve (mm) "wdir" \--\> Direccion del viento (º) "wspd" \--\> Velocidad del viento promedio (km/h) "wpgt" \--\> Dias en que la velocidad promedio supero los 30km/h "pres" \--\> Presion del aire promedio (hpa) "tsun" \--\> Duracion del sol (NA) "month" \--\> Mes de la fecha de la observacion "is_rain" \--\> Hubo precipitaciones en la observacion? "rain_stregth" \--\> Potencia de la lluvia :::
+Variables del Dataframe
+
+-   "date" \--\> Fecha de la medicion (AAAA-MM-DD)
+
+-   "tavg" \--\> Temperatura promedio (ºC)
+
+-   "tmax" \--\> Temperatura maxima (ºC)
+
+-   "tmin" \--\> Temperatura minima (ºC)
+
+-   "prcp" \--\> Precipitacion total (mm)
+
+-   "snow" \--\> Profundidad de la nieve (mm)
+
+-   "wdir" \--\> Direccion del viento (º)
+
+-   "wspd" \--\> Velocidad del viento promedio (km/h)
+
+-   "wpgt" \--\> Dias en que la velocidad promedio supero los 30km/h
+
+-   "pres" \--\> Presion del aire promedio (hpa)
+
+-   "tsun" \--\> Duracion del sol (NA)
+
+-   "month" \--\> Mes de la fecha de la observacion
+
+-   "is_rain" \--\> Hubo precipitaciones en la observacion?
+
+-   "rain_stregth" \--\> Potencia de la lluvia
 
 Como ejemplo antes de comenzar con el análisis descriptivo, vamos a proceder a mostrarles una visualización del dataframe, con el que vamos a trabajar, analizar y elaborar hipótesis. Este dataframe incluye otras variables extras a diferencia del dataframe original, lo cual nos permitió generar mas preguntas que podríamos hacer durante el análisis del proyecto.
 
@@ -87,7 +155,6 @@ str(df_clima_aeroparque_BA_2022_reformed)
 ```
 
 ------------------------------------------------------------------------
-
 
 ## ANÁLISIS DESCRIPTIVO DE VIAJES DE ECO-BICIS 2022
 
@@ -115,9 +182,9 @@ gr_trips_by_month
 gr_trips_by_day
 gr_trips_by_hour
 ```
-Tambien nos intereso analizar el uso de bicis según mes y día de la semana por horarios, para observar si existia algun patrón distinto. 
-Notamos que durante los fines de semana, el uso de bicis según horarios tiene valores mas estables que comparado a los dias de semana.
-El gráfico que divide los horarios por mes, es un poco extenso de visualizar, por lo cual decidimos agregar un grafico que los separa por cada estación del año.
+
+Tambien nos intereso analizar el uso de bicis según mes y día de la semana por horarios, para observar si existia algun patrón distinto. Notamos que durante los fines de semana, el uso de bicis según horarios tiene valores mas estables que comparado a los dias de semana. El gráfico que divide los horarios por mes, es un poco extenso de visualizar, por lo cual decidimos agregar un grafico que los separa por cada estación del año.
+
 ```{r}
 gr_trips_by_day_and_hour
 
@@ -175,20 +242,17 @@ Notamos que pareciera que nuestra proposición estaba errónea. Solamente durant
 gr_use_of_bikes_by_gender_per_hour
 ```
 
-
 Otra pregunta que nos surgió durante el análisis es si la duración de los viajes es distinta en base a los generos. A partir del gráfico observamos que los valores son relativamente cercanos pero el genero femenino tiende a utilizar las bicis durante mas tiempo.
 
 ```{r}
 gr_trips_duration_in_minutes_by_gender
 ```
 
-
-
 #### Uso en días destacados del año
 
 Durante el análisis, uno de los puntos que también nos pareció interesante indagar acerca del uso de bicis para eventos masivos que suceden en capital. ¿Los eventos incrementan el uso de bicis?
 
-Los eventos que seleccionamos fueron de forma arbitraria y fueron 8 días que están descritos en el informe. 
+Los eventos que seleccionamos fueron de forma arbitraria y fueron 8 días que están descritos en el informe.
 
 Como hemos visto antes es mucho mas común que haya viajes durante los días de semana que durante los fin de semana. Por ende, vamos a separar los eventos en 2 categorías, aquellos que ocurrieron durante dias de semana y por el otro lado aquellos que ocurrieron durante el fin de semana. Notamos que algunos eventos ocurrieron durante días de semana y fines de semana, para estos casos igualmente decidimos separarlos segun correspondan sus fechas.
 

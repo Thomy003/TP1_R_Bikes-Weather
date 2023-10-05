@@ -177,18 +177,18 @@ v_dia_finde_promedio <- as.numeric(df_bike_trips_2022_reformed %>%
 
 #viajes diarios durante los eventos que ocurrieron durante dias de la semana mayoritariamente
 df_Viajes_Promedio_Eventos_No_Finde <- data.frame(evento = v_eventos_ord,
-                                                  viajesPorEvento = c(v_bicisFeriaDelLibro, 
-                                                                      v_bicisDuaLipa, 
-                                                                      v_bicisMarchaLGBT, 
+                                                  viajesPorEvento = c(v_bicisMarchaLGBT,
+                                                                      v_bicisDuaLipa,
                                                                       v_bicisColdplay,
                                                                       v_bicisFeriadoDelMundial, 
+                                                                      v_bicisFeriaDelLibro, 
                                                                       v_dia_promedio))
 
 #viajes diarios durante los eventos que ocurrieron durante dias de fin de semana mayoritariamente
 df_Viajes_Promedio_Eventos_Finde <- data.frame(evento = v_eventos_finde_ord,
                                                viajesPorEvento = c(v_bicisComicCon, 
+                                                                   v_bicisFinalMundial,
                                                                    v_bicisPrimSound, 
-                                                                   v_bicisFinalMundial, 
                                                                    v_bicisColdplay_finde, 
                                                                    v_bicisFeriaDelLibro_finde, 
                                                                    v_dia_finde_promedio))
@@ -368,10 +368,10 @@ gr_temperatura_por_mes <- df_clima_aeroparque_BA_2022_reformed %>%
   group_by(month) %>% 
   summarise(tmin_by_month = mean(tmin), tmax_by_month = mean(tmax), tavg_by_month = mean(tavg)) %>%
   pivot_longer(cols = 2:4, names_to = "tipo", values_to = "temp") %>% 
-  ggplot(mapping = aes(x = fct_relevel(month, v_months), y = temp, fill = fct_relevel(tipo, "tmax_by_month"))) +
+  ggplot(mapping = aes(x = fct_relevel(month, v_months), y = temp, fill = fct_relevel(tipo, "tmax_by_month", "tavg_by_month"))) +
   geom_bar(stat = "identity", position = "dodge") +
   labs(title = "Clima promedio segun mes", x = "Mes", y = "Temperatura", fill = "Temp") +
-  scale_fill_manual(values = c("tmax_by_month" = "#ee6055", "tavg_by_month" = "#255f85", "tmin_by_month" = "#60d394"), labels = c("Max Temp", "Avg Temp", "Min Temp")) +
+  scale_fill_manual(values = c("tmax_by_month" = "#ee6055", "tavg_by_month" = "#60d394", "tmin_by_month" = "#255f85"), labels = c("Max Temp", "Avg Temp", "Min Temp")) +
   theme(legend.position = "bottom")
 
 #grafico de temperaturas por dia
