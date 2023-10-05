@@ -227,19 +227,19 @@ gr_trips_duration_in_minutes_col <- df_bike_trips_2022_reformed %>%
 #visualizacion de viajes por mes
 gr_trips_by_month <- df_bike_trips_2022_reformed %>% 
   ggplot(mapping = aes(x = fct_relevel(month, v_months))) +
-  geom_bar(fill = "mintcream", colour = "lightskyblue") +
+  geom_bar(fill = "#B6C8D9", colour = "#6FA3AE") +
   labs(x = "Mes", y = "Cantidad", title = "Cantidad de recorridos durante cada mes del año")
 
 #visualizacion de viajes por dia
 gr_trips_by_day <- df_bike_trips_2022_reformed %>% 
   ggplot(mapping = aes(x = fct_relevel(week_day, v_all_days)))+
-  geom_bar(fill = "mintcream", colour = "lightskyblue") +
+  geom_bar(fill = "#B6C8D9", colour = "#6FA3AE") +
   labs(x = "Dia de la semana", y = "Cantidad", title = "Cantidad de recorridos durante cada dia de la semana")
 
 #visualizacion de viajes por hora
 gr_trips_by_hour <- df_bike_trips_2022_reformed %>% 
   ggplot(mapping = aes(x = hour)) +
-  geom_bar(fill = "mintcream", colour = "lightskyblue") +
+  geom_bar(fill = "#B6C8D9", colour = "#6FA3AE") +
   labs(x = "Horario", y = "Cantidad", title = "Cantidad de recorridos durante cada hora del dia") 
 
 #visualizacion de viajes por mes y hora
