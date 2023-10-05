@@ -8,7 +8,7 @@
 
 <meta name="author" content="Salvador de Vedia, Miguel Avendaño, Thomas Castagnola">
 
-<title>TP1</title>
+<title>TP1: Análisis EcoBici y Clima 2022</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -3024,7 +3024,8 @@ vertical-align: -.125em;
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">TP1</h1>
+<h1 class="title">TP1: Análisis EcoBici y Clima 2022</h1>
+<p class="subtitle lead">Laboratorio de Datos</p>
 </div>
 
 
@@ -3068,13 +3069,23 @@ CONSIDERACION
 <section id="información-sobre-las-librerías" class="level2">
 <h2 class="anchored" data-anchor-id="información-sobre-las-librerías">INFORMACIÓN SOBRE LAS LIBRERÍAS</h2>
 <p>Para nuestro proyecto de análisis de datos, utilizaremos las librerías tidyverse y readr.</p>
-<p><code>tidyverse</code> es un conjunto de librerías en R diseñados para ciencia de datos, que nos facilita la manipulación y visualización de datos. Algunas paquetes que forman parte de esta librería son: - <code>ggplot2</code>: es un paquete que nos permite crear gráficos de capas de forma sencilla mediante la función <code>ggplot</code>, seleccionar el tipo de gráfico mediante <code>geom_*tipoDeGráfico*</code> y personalizar la estética de éstos mediante <code>theme</code> y otros atributos que existen en las distintas capas. - <code>dplyr</code>: es un paquete de herramientas para la manipulación de datos, entre las cuales se encuentran funciones de filtrado, agregación y transformación. - <code>tidyr</code>: es un paquete de funciones que facilitan la manipulación de datos en formato “tidy”, donde cada variable tiene su propia columna y cada fila corresponde a observaciones realizadas de cada variable.</p>
+<p><code>tidyverse</code> es un conjunto de librerías en R diseñados para ciencia de datos, que nos facilita la manipulación y visualización de datos. Algunas paquetes que forman parte de esta librería son:</p>
+<ul>
+<li><p><code>ggplot2</code>: es un paquete que nos permite crear gráficos de capas de forma sencilla mediante la función <code>ggplot</code>, seleccionar el tipo de gráfico mediante <code>geom_*tipoDeGráfico*</code> y personalizar la estética de éstos mediante <code>theme</code> y otros atributos que existen en las distintas capas.</p></li>
+<li><p><code>dplyr</code>: es un paquete de herramientas para la manipulación de datos, entre las cuales se encuentran funciones de filtrado, agregación y transformación.</p></li>
+<li><p><code>tidyr</code>: es un paquete de funciones que facilitan la manipulación de datos en formato “tidy”, donde cada variable tiene su propia columna y cada fila corresponde a observaciones realizadas de cada variable.</p></li>
+<li><p><code>knitr</code>: Es una librería que mejora la generación de informes reproducibles. La utilizamos para mejorar la visualización de los data frames en el html.</p></li>
+</ul>
 <p>Por otro lado <code>readr</code> es una librería centrada en la lectura de datos de diferentes formatos (CSV, Excel, etc.) de manera eficiente.</p>
 <hr>
 </section>
 <section id="scripts-archivos-del-proyecto" class="level2">
 <h2 class="anchored" data-anchor-id="scripts-archivos-del-proyecto">SCRIPTS / ARCHIVOS DEL PROYECTO</h2>
-<p>El informe realizado está organizado mediante un archivo de formato <code>Rproj</code>, el cual contiene metadatos sobre el proyecto (nombre, directorio -carpeta que contiene el proyecto-, librerías utilizadas, entre otros). La carpeta que contiene el proyecto: <code>TP1_R_Bikes-Weather</code>, contiene 2 archivos esenciales para la manipulación de datos, su análisis y el desarrollo de un informe: - <code>Quarto TP.qmd</code>: Es un archivo de tipo Quarto en el cual se encuentra el informe realizado sobre el análisis exploratorio y descriptivo de los conjuntos de datos de interés. - <code>Script_TP1.R</code>: Es un archivo de formato R que contiene el código esencial para la generación de recursos esenciales para el desarrollo del informe. Entre estos recursos se encuentran: variables de interés previamente establecidas, la importación del conjunto de datos contenidos en los archivos <code>.csv</code>, las librerías utilizadas y el tratamiento realizado sobre los dataframes para la generación de diversos recursos.</p>
+<p>El informe realizado está organizado mediante un archivo de formato <code>Rproj</code>, el cual contiene metadatos sobre el proyecto (nombre, directorio -carpeta que contiene el proyecto-, librerías utilizadas, entre otros). La carpeta que contiene el proyecto: <code>TP1_R_Bikes-Weather</code>, contiene 2 archivos esenciales para la manipulación de datos, su análisis y el desarrollo de un informe:</p>
+<ul>
+<li><p><code>Quarto TP.qmd</code>: Es un archivo de tipo Quarto en el cual se encuentra el informe realizado sobre el análisis exploratorio y descriptivo de los conjuntos de datos de interés.</p></li>
+<li><p><code>Script_TP1.R</code>: Es un archivo de formato R que contiene el código esencial para la generación de recursos esenciales para el desarrollo del informe. Entre estos recursos se encuentran: variables de interés previamente establecidas, la importación del conjunto de datos contenidos en los archivos <code>.csv</code>, las librerías utilizadas y el tratamiento realizado sobre los dataframes para la generación de diversos recursos.</p></li>
+</ul>
 <p>Mediante la función <code>source</code> de R base, podemos ejecutar los archivos locales esenciales para la visualización de los datos mediante gráficos, tablas y dataframes.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="at">file =</span> <span class="st">&quot;Script_TP1.R&quot;</span>, <span class="at">local =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
