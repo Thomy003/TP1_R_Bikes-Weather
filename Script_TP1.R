@@ -29,14 +29,20 @@ v_months <- c("January", "February", "March", "April", "May", "June", "July", "A
 v_feriados <- c("2022-01-01", "2022-02-28", "2022-03-01", "2022-03-24", "2022-04-02", "2022-04-14", "2022-04-15", "2022-04-16", "2022-04-17", "2022-04-22", "2022-04-23", "2022-04-24", "2022-05-01", "2022-05-02", "2022-05-18", "2022-05-25", "2022-06-17", "2022-06-20", "2022-07-09", "2022-07-30", "2022-08-15", "2022-09-26", "2022-09-27", "2022-10-05", "2022-10-07", "2022-10-10", "2022-11-20", "2022-11-21", "2022-12-08", "2022-12-09", "2022-12-25")
 
 #(nota: cp indica la cantidad de personas)
-v_feriaLibro <- c("2022-04-28","2022-04-29","2022-04-30","2022-05-01","2022-05-02","2022-05-03","2022-05-04","2022-05-05","2022-05-06","2022-05-07","2022-05-08","2022-05-09","2022-05-10","2022-05-11","2022-05-12","2022-05-13","2022-05-14","2022-05-15","2022-05-16") #cp = 1.245.000
+v_feriaLibro <- c("2022-04-28","2022-04-29","2022-05-02","2022-05-03","2022-05-04","2022-05-05","2022-05-06","2022-05-09","2022-05-10","2022-05-11","2022-05-12","2022-05-13","2022-05-16") #cp = 1.245.000
+v_feriaLibro_finde <- c("2022-04-30","2022-05-01","2022-05-07","2022-05-08", "2022-05-14","2022-05-15")
 v_comicCon <- c("2022-05-20","2022-05-21","2022-05-22") #cp = 80 mil
 v_duaLipa <- c("2022-09-13","2022-09-14") #cp = 50 mil
 v_marchaLGBTQI <- c("2022-10-05") #cp = 130 mil
-v_coldplay <- c("2022-10-25","2022-10-26","2022-10-28","2022-10-29","2022-11-01","2022-11-02","2022-11-04","2022-11-05","2022-11-07","2022-11-08") #cp = 600 mil
+v_coldplay <- c("2022-10-25","2022-10-26","2022-10-28","2022-11-01","2022-11-02","2022-11-04","2022-11-07","2022-11-08") #cp = 600 mil
+v_coldplay_finde <- c("2022-10-29", "2022-11-05")
 v_primaveraSound <- c("2022-11-12","2022-11-13") #cp = 100 mil
 v_finalMundial <- c("2022-12-18") #cp = 4 millones
-v_feriadoMundial <- c("2022-12-20") 
+v_feriado_del_Mundial <- c("2022-12-20") 
+
+
+v_eventos_ord <- c("Marcha LGBT", "Dua Lipa", "Coldplay", "Feriado del mundial", "Feria del Libro", "Dia Promedio")
+v_eventos_finde_ord <- c("Comic Con", "Mundial", "Primavera Sound", "Coldplay", "Feria del Libro", "Dia Promedio")
 
 
 #Dataframes_bicis_modificado ----
@@ -113,6 +119,12 @@ df_uso_feriado_vs_no_feriado_prom <- data.frame(es_feriado = c("feriado", "no fe
 v_bicisFeriaDelLibro <- as.numeric(df_bike_trips_2022_reformed %>%
                                      filter(date %in% v_feriaLibro) %>%
                                      summarise(cantidad = n()/length(v_feriaLibro)))
+
+v_bicisFeriaDelLibro_finde <- as.numeric(df_bike_trips_2022_reformed %>%
+                                     filter(date %in% v_feriaLibro_finde) %>%
+                                     summarise(cantidad = n()/length(v_feriaLibro_finde)))
+
+
 # Comic Con
 v_bicisComicCon <- as.numeric(df_bike_trips_2022_reformed %>%
                                 filter(date %in% v_comicCon) %>%
@@ -129,6 +141,11 @@ v_bicisMarchaLGBT <- as.numeric(df_bike_trips_2022_reformed %>%
 v_bicisColdplay <- as.numeric(df_bike_trips_2022_reformed %>%
                                 filter(date %in% v_coldplay) %>%
                                 summarise(cantidad = round(n()/length(v_coldplay))))
+
+v_bicisColdplay_finde <- as.numeric(df_bike_trips_2022_reformed %>%
+                                   filter(date %in% v_coldplay_finde) %>%
+                                   summarise(cantidad = round(n()/length(v_coldplay_finde))))
+
 #PrimaveraSound
 v_bicisPrimSound <- as.numeric(df_bike_trips_2022_reformed %>%
                                  filter(date %in% v_primaveraSound) %>%
@@ -137,10 +154,10 @@ v_bicisPrimSound <- as.numeric(df_bike_trips_2022_reformed %>%
 v_bicisFinalMundial <- as.numeric(df_bike_trips_2022_reformed %>%
                                     filter(date %in% v_finalMundial) %>%
                                     summarise(cantidad = round(n()/length(v_finalMundial))))
-# Feriado Mundial
-v_bicisFeriadoMundial <- as.numeric(df_bike_trips_2022_reformed %>%
-                                      filter(date == v_feriadoMundial) %>%
-                                      summarise(cantidad = round(n()/length(v_feriadoMundial))))
+# Feriado del Mundial
+v_bicisFeriadoDelMundial <- as.numeric(df_bike_trips_2022_reformed %>%
+                                      filter(date == v_feriado_del_Mundial) %>%
+                                      summarise(cantidad = round(n()/length(v_feriado_del_Mundial))))
 
 v_dia_promedio <- as.numeric(df_bike_trips_2022_reformed %>% 
                                filter(week_day %in% c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday")) %>% 
@@ -155,12 +172,12 @@ v_dia_finde_promedio <- as.numeric(df_bike_trips_2022_reformed %>%
                                      summarise(cant_prom = sum(cantidad) / length(date)))
 
 #viajes diarios durante los eventos que ocurrieron durante dias de la semana mayoritariamente
-df_Viajes_Promedio_Eventos_No_Finde <- data.frame(evento = c("Feria del Libro","Dua Lipa","Marcha LGBT","Coldplay","Feriado mundial", "Dia Prom"),
-                                                  viajesPorEvento = c(v_bicisFeriaDelLibro, v_bicisDuaLipa, v_bicisMarchaLGBT, v_bicisColdplay,v_bicisFeriadoMundial, v_dia_promedio))
+df_Viajes_Promedio_Eventos_No_Finde <- data.frame(evento = c("Feria del Libro","Dua Lipa","Marcha LGBT","Coldplay","Feriado del mundial", "Dia Promedio"),
+                                                  viajesPorEvento = c(v_bicisFeriaDelLibro, v_bicisDuaLipa, v_bicisMarchaLGBT, v_bicisColdplay,v_bicisFeriadoDelMundial, v_dia_promedio))
 
 #viajes diarios durante los eventos que ocurrieron durante dias de fin de semana mayoritariamente
-df_Viajes_Promedio_Eventos_Finde <- data.frame(evento = c("Comic Con", "Primavera Sound", "Mundial", "Dia Promedio"),
-                                               viajesPorEvento = c(v_bicisComicCon, v_bicisPrimSound, v_bicisFinalMundial, v_dia_finde_promedio))
+df_Viajes_Promedio_Eventos_Finde <- data.frame(evento = c("Comic Con", "Primavera Sound", "Mundial", "Coldplay", "Feria del Libro", "Dia Promedio"),
+                                               viajesPorEvento = c(v_bicisComicCon, v_bicisPrimSound, v_bicisFinalMundial, v_bicisColdplay_finde, v_bicisFeriaDelLibro_finde, v_dia_finde_promedio))
 
 
 #cantidad de viajes durante dias de lluvia y no lluvia
@@ -216,7 +233,17 @@ gr_trips_by_month_and_hour <- df_bike_trips_2022_reformed %>%
   group_by(month) %>% 
   ggplot(mapping = aes(x = hour)) +
   geom_bar(fill = "#CBA872",color = "#A05806") +
-  facet_wrap(~fct_relevel(month, c("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"))) +
+  facet_wrap(~fct_relevel(month, v_months)) +
+  labs(x = "Horario", y = "Cantidad", title = "Cantidad de recorricos por mes segun horario")
+
+gr_trips_by_season_and_hour <- df_bike_trips_2022_reformed %>% 
+  mutate(season = case_when(date >= "2022-03-21" & date <= "2022-06-20" ~ "Autumn",
+                            date >= "2022-06-21" & date <= "2022-09-20" ~ "Winter",
+                            date >= "2022-09-21" & date <= "2022-12-20" ~ "Spring",
+                            .default = "Summer")) %>% 
+  ggplot(mapping = aes(x = hour)) +
+  geom_bar(fill = "#CBA872",color = "#A05806") +
+  facet_wrap(~fct_relevel(season, c("Summer", "Autumn", "Winter", "Spring"))) +
   labs(x = "Horario", y = "Cantidad", title = "Cantidad de recorricos por mes segun horario")
 
 #visualizacion de viajes por dia y hora
@@ -232,7 +259,7 @@ gr_trips_by_day_and_hour <- df_bike_trips_2022_reformed %>%
 #visualizacion de viajes promedio de dias feriados y no feriados
 gr_viajes_promedio_feriados <- df_uso_feriado_vs_no_feriado_prom %>% 
   ggplot(mapping = aes(x = es_feriado, y = viajes_promedio)) + 
-  geom_col(fill = c("#B6803C", "#A05806"), color = "black") +
+  geom_col(fill = c("#d4e09b", "#cbdfbd"), color = "black") +
   labs(x = "", y = "Viajes diarios", title = "Cantidad de viajes diarios 'Feriados Vs No Feriados'")
 
 
@@ -296,14 +323,29 @@ gr_Eventos_Dia_De_Semana <- df_Viajes_Promedio_Eventos_No_Finde %>%
   ggplot(mapping = aes(x = evento, y = viajesPorEvento, fill = evento)) +
   geom_col() +
   labs(x = "Eventos/Dia Promedio", y = "Viajes diarios", title = "Uso de bicis dias de la semana 'Eventos'", subtitle = "Cantidad de usos de bicis diarios durante dias normales y dias de evento que ocurrieron durante el lunes y viernes") +
-  scale_x_discrete(limits = c("Marcha LGBT", "Dua Lipa", "Coldplay", "Feriado mundial", "Feria del Libro", "Dia Prom"))
+  scale_x_discrete(limits = v_eventos_ord) +
+  scale_fill_manual(values = c("Marcha LGBT" = "#ef476f", 
+                               "Dua Lipa" = "#f78c6b", 
+                               "Coldplay" = "#ffd166",
+                               "Feriado del mundial" = "#06d6a0",
+                               "Feria del Libro" =  "#118ab2",
+                               "Dia Promedio" = "#073b4c"), 
+                    breaks = v_eventos_ord)
+  
 
 #visualizacion de usos de bicis promedio comparado con dias de eventos (fin de semana)
 gr_Eventos_Fin_De_Semana <- df_Viajes_Promedio_Eventos_Finde %>%
   ggplot(mapping = aes(x = evento, y = viajesPorEvento, fill = evento)) +
   geom_col() +
   labs(x = "Eventos/Dia Promedio", y = "Viajes diarios", title = "Uso de bicis diarios fin de semana 'Eventos'", subtitle = "Cantidad de usos de bicis diarios durante dias normales y dias de evento que ocurrieron durante el fin de semana") +
-  scale_x_discrete(limits = c("Comic Con", "Mundial", "Primavera Sound", "Dia Promedio"))
+  scale_x_discrete(limits = v_eventos_finde_ord) +
+    scale_fill_manual(values = c("Comic Con" = "#ef476f", 
+                               "Mundial" = "#f78c6b", 
+                               "Primavera Sound" = "#ffd166",
+                               "Coldplay" = "#06d6a0",
+                               "Feria del Libro" =  "#118ab2",
+                               "Dia Promedio" = "#073b4c"), 
+                    breaks = v_eventos_finde_ord)
 
 
 #grafico de temperaturas por mes
@@ -333,7 +375,7 @@ gr_precipitaciones_por_mes <- df_clima_aeroparque_BA_2022_reformed %>%
   filter(!is.na(prcp)) %>% 
   summarise(precipitation_by_month = mean(prcp)) %>% 
   ggplot(mapping = aes(x = fct_relevel(month, c("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December")), y = precipitation_by_month)) +
-  geom_col(fill = "#c8691c", colour = "#a67b5b") +
+  geom_col(fill = "#386fa4", colour = "#133c55") +
   labs(x = "Mes",y = "Precipitacion (mm)", title = "Precipitaciones por mes")
 
 

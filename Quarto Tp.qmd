@@ -117,9 +117,13 @@ gr_trips_by_hour
 ```
 Tambien nos intereso analizar el uso de bicis según mes y día de la semana por horarios, para observar si existia algun patrón distinto. 
 Notamos que durante los fines de semana, el uso de bicis según horarios tiene valores mas estables que comparado a los dias de semana.
+El gráfico que divide los horarios por mes, es un poco extenso de visualizar, por lo cual decidimos agregar un grafico que los separa por cada estación del año.
 ```{r}
-gr_trips_by_month_and_hour
 gr_trips_by_day_and_hour
+
+gr_trips_by_month_and_hour
+
+gr_trips_by_season_and_hour
 ```
 
 #### Feriados vs no feriados
@@ -184,9 +188,9 @@ gr_trips_duration_in_minutes_by_gender
 
 Durante el análisis, uno de los puntos que también nos pareció interesante indagar acerca del uso de bicis para eventos masivos que suceden en capital. ¿Los eventos incrementan el uso de bicis?
 
-Los eventos que seleccionamos fueron de forma arbitraria y fueron 8 días que están descritos en el informe.
+Los eventos que seleccionamos fueron de forma arbitraria y fueron 8 días que están descritos en el informe. 
 
-Como vimos antes es mas común que haya mas viajes durante los días de semana que los fin de semana. Por ende vamos a analizar los eventos que ocurrieron durante estos días por separado Notamos que dependiendo del día del evento en promedio
+Como hemos visto antes es mucho mas común que haya viajes durante los días de semana que durante los fin de semana. Por ende, vamos a separar los eventos en 2 categorías, aquellos que ocurrieron durante dias de semana y por el otro lado aquellos que ocurrieron durante el fin de semana. Notamos que algunos eventos ocurrieron durante días de semana y fines de semana, para estos casos igualmente decidimos separarlos segun correspondan sus fechas.
 
 ```{r}
 gr_Eventos_Fin_De_Semana
