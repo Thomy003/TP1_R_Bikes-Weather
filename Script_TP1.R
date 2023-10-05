@@ -21,6 +21,23 @@ df_clima_aeroparque_BA_2022 <- read_csv("Data/Clima_Aeroparque_BA.csv")
 
 df_bike_trips_2022 <- read_csv("Data/trips_2022_reducido.csv")
 
+#VARIABLES ----
+
+v_months <- c("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December")
+
+#Las fechas de los días feriados de Argentina 2022 los obtuvimos de la siguiente pagina: https://www.argentina.gob.ar/interior/feriados-nacionales-2022
+v_feriados <- c("2022-01-01", "2022-02-28", "2022-03-01", "2022-03-24", "2022-04-02", "2022-04-14", "2022-04-15", "2022-04-16", "2022-04-17", "2022-04-22", "2022-04-23", "2022-04-24", "2022-05-01", "2022-05-02", "2022-05-18", "2022-05-25", "2022-06-17", "2022-06-20", "2022-07-09", "2022-07-30", "2022-08-15", "2022-09-26", "2022-09-27", "2022-10-05", "2022-10-07", "2022-10-10", "2022-11-20", "2022-11-21", "2022-12-08", "2022-12-09", "2022-12-25")
+
+#(nota: cp indica la cantidad de personas)
+v_feriaLibro <- c("2022-04-28","2022-04-29","2022-04-30","2022-05-01","2022-05-02","2022-05-03","2022-05-04","2022-05-05","2022-05-06","2022-05-07","2022-05-08","2022-05-09","2022-05-10","2022-05-11","2022-05-12","2022-05-13","2022-05-14","2022-05-15","2022-05-16") #cp = 1.245.000
+v_comicCon <- c("2022-05-20","2022-05-21","2022-05-22") #cp = 80 mil
+v_duaLipa <- c("2022-09-13","2022-09-14") #cp = 50 mil
+v_marchaLGBTQI <- c("2022-10-05") #cp = 130 mil
+v_coldplay <- c("2022-10-25","2022-10-26","2022-10-28","2022-10-29","2022-11-01","2022-11-02","2022-11-04","2022-11-05","2022-11-07","2022-11-08") #cp = 600 mil
+v_primaveraSound <- c("2022-11-12","2022-11-13") #cp = 100 mil
+v_finalMundial <- c("2022-12-18") #cp = 4 millones
+v_feriadoMundial <- c("2022-12-20") 
+
 
 #Dataframes_bicis_modificado ----
 #Dataframe de bicis filtrado por duración del recorrido, con 4 variables mas ("month", "week_day", "hour" y "public_holiday") y la variable fecha renombrada a date.
@@ -52,6 +69,7 @@ df_clima_aeroparque_BA_2022_reformed <- df_clima_aeroparque_BA_2022 %>%
 #Dataframe_joined ----
 #FULL JOIN DE DATAFRAMES
 df_bikes_and_weather <- full_join(df_bike_trips_2022_reformed, df_clima_aeroparque_BA_2022_reformed, by = "date")
+
 
 #Dataframes Descriptivos ----
 #dataframe con la duracion de viaje promedio y mediana
@@ -89,45 +107,6 @@ df_uso_feriado_vs_no_feriado <- df_bike_trips_2022_reformed %>%
 df_uso_feriado_vs_no_feriado_prom <- data.frame(es_feriado = c("feriado", "no feriado"), 
                                                 viajes_promedio = c(as.numeric(df_uso_feriado_vs_no_feriado[2,2]) / 31, 
                                                                     as.numeric(df_uso_feriado_vs_no_feriado[1,2]) / 334))
-
-#viajes diarios durante los eventos que ocurrieron durante dias de la semana mayoritariamente
-df_Viajes_Promedio_Eventos_No_Finde <- data.frame(evento = c("Feria del Libro","Dua Lipa","Marcha LGBT","Coldplay","Feriado mundial", "Dia Prom"),
-                                                  viajesPorEvento = c(v_bicisFeriaDelLibro, v_bicisDuaLipa, v_bicisMarchaLGBT, v_bicisColdplay,v_bicisFeriadoMundial, v_dia_promedio))
-
-#viajes diarios durante los eventos que ocurrieron durante dias de fin de semana mayoritariamente
-df_Viajes_Promedio_Eventos_Finde <- data.frame(evento = c("Comic Con", "Primavera Sound", "Mundial", "Dia Promedio"),
-                                               viajesPorEvento = c(v_bicisComicCon, v_bicisPrimSound, v_bicisFinalMundial, v_dia_finde_promedio))
-
-
-#cantidad de viajes durante dias de lluvia y no lluvia
-df_uso_de_bicis_segun_precipitaciones <- df_bikes_and_weather %>% 
-  filter(!is.na(prcp)) %>% 
-  group_by(is_rain) %>% 
-  summarise(viajes_lluvia = n())
-
-#cantidad de viajes diarios durante dias de lluvia y no lluvia
-df_uso_de_bicis_segun_precipitaciones_prom <- data.frame(es_lluvia = c("llovio", "no llovio"), 
-                                                         viajes_promedio = c(as.numeric(df_uso_de_bicis_segun_precipitaciones[2,2]) / 97, 
-                                                                             as.numeric(df_uso_de_bicis_segun_precipitaciones[1,2]) / 266))
-
-
-
-#VARIABLES ----
-
-v_months <- c("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December")
-
-#Las fechas de los días feriados de Argentina 2022 los obtuvimos de la siguiente pagina: https://www.argentina.gob.ar/interior/feriados-nacionales-2022
-v_feriados <- c("2022-01-01", "2022-02-28", "2022-03-01", "2022-03-24", "2022-04-02", "2022-04-14", "2022-04-15", "2022-04-16", "2022-04-17", "2022-04-22", "2022-04-23", "2022-04-24", "2022-05-01", "2022-05-02", "2022-05-18", "2022-05-25", "2022-06-17", "2022-06-20", "2022-07-09", "2022-07-30", "2022-08-15", "2022-09-26", "2022-09-27", "2022-10-05", "2022-10-07", "2022-10-10", "2022-11-20", "2022-11-21", "2022-12-08", "2022-12-09", "2022-12-25")
-
-#(nota: cp indica la cantidad de personas)
-v_feriaLibro <- c("2022-04-28","2022-04-29","2022-04-30","2022-05-01","2022-05-02","2022-05-03","2022-05-04","2022-05-05","2022-05-06","2022-05-07","2022-05-08","2022-05-09","2022-05-10","2022-05-11","2022-05-12","2022-05-13","2022-05-14","2022-05-15","2022-05-16") #cp = 1.245.000
-v_comicCon <- c("2022-05-20","2022-05-21","2022-05-22") #cp = 80 mil
-v_duaLipa <- c("2022-09-13","2022-09-14") #cp = 50 mil
-v_marchaLGBTQI <- c("2022-10-05") #cp = 130 mil
-v_coldplay <- c("2022-10-25","2022-10-26","2022-10-28","2022-10-29","2022-11-01","2022-11-02","2022-11-04","2022-11-05","2022-11-07","2022-11-08") #cp = 600 mil
-v_primaveraSound <- c("2022-11-12","2022-11-13") #cp = 100 mil
-v_finalMundial <- c("2022-12-18") #cp = 4 millones
-v_feriadoMundial <- c("2022-12-20") 
 
 
 # Feria del libro
@@ -174,6 +153,28 @@ v_dia_finde_promedio <- as.numeric(df_bike_trips_2022_reformed %>%
                                      group_by(date) %>% 
                                      summarise(cantidad = n()) %>% 
                                      summarise(cant_prom = sum(cantidad) / length(date)))
+
+#viajes diarios durante los eventos que ocurrieron durante dias de la semana mayoritariamente
+df_Viajes_Promedio_Eventos_No_Finde <- data.frame(evento = c("Feria del Libro","Dua Lipa","Marcha LGBT","Coldplay","Feriado mundial", "Dia Prom"),
+                                                  viajesPorEvento = c(v_bicisFeriaDelLibro, v_bicisDuaLipa, v_bicisMarchaLGBT, v_bicisColdplay,v_bicisFeriadoMundial, v_dia_promedio))
+
+#viajes diarios durante los eventos que ocurrieron durante dias de fin de semana mayoritariamente
+df_Viajes_Promedio_Eventos_Finde <- data.frame(evento = c("Comic Con", "Primavera Sound", "Mundial", "Dia Promedio"),
+                                               viajesPorEvento = c(v_bicisComicCon, v_bicisPrimSound, v_bicisFinalMundial, v_dia_finde_promedio))
+
+
+#cantidad de viajes durante dias de lluvia y no lluvia
+df_uso_de_bicis_segun_precipitaciones <- df_bikes_and_weather %>% 
+  filter(!is.na(prcp)) %>% 
+  group_by(is_rain) %>% 
+  summarise(viajes_lluvia = n())
+
+#cantidad de viajes diarios durante dias de lluvia y no lluvia
+df_uso_de_bicis_segun_precipitaciones_prom <- data.frame(es_lluvia = c("llovio", "no llovio"), 
+                                                         viajes_promedio = c(as.numeric(df_uso_de_bicis_segun_precipitaciones[2,2]) / 97, 
+                                                                             as.numeric(df_uso_de_bicis_segun_precipitaciones[1,2]) / 266))
+
+
 
 #GRAFICOS ----
 
