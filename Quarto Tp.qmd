@@ -8,9 +8,11 @@ format:
 editor: source
 ---
 
-#CONSIDERACION
-
+::: {.callout-note}
+## CONSIDERACION
 Nuestras PC's trabajan con las variables en ingles y no en español, entonces si surgen problemas con el fct_level por ejemplo, es porque nosotros ordenamos las categorías en ingles y no español :).
+:::
+
 
 ------------------------------------------------------------------------
 
@@ -43,7 +45,7 @@ El informe realizado está organizado mediante un archivo de formato `Rproj`, el
 
 Mediante la función `source` de R base, podemos ejecutar los archivos locales esenciales para la visualización de los datos mediante gráficos, tablas y dataframes.
 
-```{r warning=FALSE}
+```{r message=FALSE}
 source(file = "Script_TP1.R", local = TRUE)
 ```
 
@@ -102,7 +104,10 @@ Variables del Dataframe
 Como ejemplo antes de comenzar con el análisis descriptivo, vamos a proceder a mostrarles una visualización del dataframe, con el que vamos a trabajar, analizar y elaborar hipótesis. Este dataframes incluye otras variables extras a diferencia del dataframe original, lo cual nos permitió generar mas preguntas que podríamos hacer durante el análisis del proyecto.
 
 ```{r}
-head(df_bike_trips_2022_reformed)
+#| label: tbl-LABEL
+#| tbl-cap: CAPTION
+
+knitr::kable(head(df_bike_trips_2022_reformed))
 ```
 
 A continuación de la visualización del dataframe utilizamos dos funciones llamadas "summary" y "str" que nos dieron un primer pantallazo acerca de los tipos de datos y valores que contienen cada una de las variables del dataframe.
@@ -152,7 +157,7 @@ Variables del Dataframe
 Como ejemplo antes de comenzar con el análisis descriptivo, vamos a proceder a mostrarles una visualización del dataframe, con el que vamos a trabajar, analizar y elaborar hipótesis. Este dataframe incluye otras variables extras a diferencia del dataframe original, lo cual nos permitió generar mas preguntas que podríamos hacer durante el análisis del proyecto.
 
 ```{r}
-head(df_clima_aeroparque_BA_2022_reformed)
+knitr::kable(head(df_clima_aeroparque_BA_2022_reformed))
 ```
 
 A continuación de la visualización del dataframe utilizamos dos funciones llamadas "summary" y "str" que nos dieron un primer pantallazo acerca de los tipos de datos y valores que contienen cada una de las variables del dataframe.
@@ -181,7 +186,7 @@ gr_trips_duration_in_minutes_col
 ```
 
 ```{r}
-df_promedio_y_mediana_de_viajes
+knitr::kable(df_promedio_y_mediana_de_viajes)
 ```
 
 #### Fecha de recorridos
@@ -217,15 +222,15 @@ gr_viajes_promedio_feriados
 A la hora de decidir cuantas bicis debería haber disponible en cada estación, es conveniente preguntarse ¿Cuantas bicis se usan por estación? ¿Y cuales son los recorridos mas comunes? Las estaciones que tienen mayor frecuencia de usuarios, son aquellas que deberían tener asignadas mas bicicletas para cubrir la demanda.
 
 ```{r}
-df_origin_trip
+knitr::kable(df_origin_trip)
 ```
 
 ```{r}
-df_destination_trip
+knitr::kable(df_destination_trip)
 ```
 
 ```{r}
-df_common_trips
+knitr::kable(df_common_trips)
 ```
 
 #### Modelo de Bicicleta
