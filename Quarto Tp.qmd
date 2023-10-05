@@ -32,6 +32,7 @@ Para nuestro proyecto de análisis de datos, utilizaremos las librerías tidyver
 -   `ggplot2`: es un paquete que nos permite crear gráficos de capas de forma sencilla mediante la función `ggplot`, seleccionar el tipo de gráfico mediante `geom_*tipoDeGráfico*` y personalizar la estética de éstos mediante `theme` y otros atributos que existen en las distintas capas. 
 -   `dplyr`: es un paquete de herramientas para la manipulación de datos, entre las cuales se encuentran funciones de filtrado, agregación y transformación. 
 -   `tidyr`: es un paquete de funciones que facilitan la manipulación de datos en formato "tidy", donde cada variable tiene su propia columna y cada fila corresponde a observaciones realizadas de cada variable.
+- `knitr`: Es una librería que mejora la generación de informes reproducibles. La utilizamos para mejorar la visualización de los data frames en el html.
 
 Por otro lado `readr` es una librería centrada en la lectura de datos de diferentes formatos (CSV, Excel, etc.) de manera eficiente.
 
@@ -157,6 +158,9 @@ Variables del Dataframe
 Como ejemplo antes de comenzar con el análisis descriptivo, vamos a proceder a mostrarles una visualización del dataframe, con el que vamos a trabajar, analizar y elaborar hipótesis. Este dataframe incluye otras variables extras a diferencia del dataframe original, lo cual nos permitió generar mas preguntas que podríamos hacer durante el análisis del proyecto.
 
 ```{r}
+#| label: tbl-LABEL2
+#| tbl-cap: CAPTION2
+
 knitr::kable(head(df_clima_aeroparque_BA_2022_reformed))
 ```
 
@@ -222,15 +226,24 @@ gr_viajes_promedio_feriados
 A la hora de decidir cuantas bicis debería haber disponible en cada estación, es conveniente preguntarse ¿Cuantas bicis se usan por estación? ¿Y cuales son los recorridos mas comunes? Las estaciones que tienen mayor frecuencia de usuarios, son aquellas que deberían tener asignadas mas bicicletas para cubrir la demanda.
 
 ```{r}
-knitr::kable(df_origin_trip)
+#| label: tbl-LABEL3
+#| tbl-cap: CAPTION3
+
+knitr::kable(head(df_origin_trip))
 ```
 
 ```{r}
-knitr::kable(df_destination_trip)
+#| label: tbl-LABEL4
+#| tbl-cap: CAPTION4
+
+knitr::kable(head(df_destination_trip))
 ```
 
 ```{r}
-knitr::kable(df_common_trips)
+#| label: tbl-LABEL5
+#| tbl-cap: CAPTION5
+
+knitr::kable(head(df_common_trips))
 ```
 
 #### Modelo de Bicicleta
