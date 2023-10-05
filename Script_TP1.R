@@ -1,9 +1,4 @@
-#CONSIDERACIONES ----
-
-#1. Nuestras PC's trabajan con las variables en ingles y no en español, entonces si surgen problemas con el fct_level por ejemplo, es porque nosotros ordenamos las categorías en ingles y no español.
-
-#2. Para tener una compresión mas rápida de los nombres de variables, utilizamos los siguientes prefijos "df_" para referirnos a un dataframe, "gr_" para referirnos a un gráfico y "v_" para referirnos a una variable.
-
+#Para tener una compresión mas rápida de los nombres de variables, utilizamos los siguientes prefijos "df_" para referirnos a un dataframe, "gr_" para referirnos a un gráfico y "v_" para referirnos a una variable.
 
 #LIBRERIAS ----
 library(readr)
